@@ -1,6 +1,19 @@
 # Tally
 Tally is the backend for tracking transactions for various products sold at the study association. In addition to products, other expenses that are not linked to a product can also be tracked here. An export can be made of the products sold in a certain time period.
 
+<!-- TOC start -->
+- [Tally](#tally)
+  * [Features](#features)
+  * [Run Locally](#run-locally)
+    + [Creating a admin user](#creating-a-admin-user)
+  * [Environment Variables (Dummy text)](#environment-variables-dummy-text)
+  * [API Reference (Dummy text)](#api-reference-dummy-text)
+      - [Get all items](#get-all-items)
+      - [Get item](#get-item)
+      - [add(num1, num2)](#addnum1-num2)
+  * [Contributing (Dummy text)](#contributing-dummy-text)
+<!-- TOC end -->
+
 ## Features
 If the backend is finished, these are the features that the server has.
 
