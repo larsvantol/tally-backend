@@ -14,37 +14,37 @@ If the backend is finished, these are the features that the server has.
 Clone the project
 
 ```bash
-  git clone https://github.com/larsvantol/turf.git
+git clone https://github.com/larsvantol/turf.git
 ```
 
 Go to the root of the project directory and setup a virtual environment.
 
 ```bash
-  python venv venv
+python venv venv
 ```
 
 Activate the virtual environment.
 
 ```bash
-  python venv\Scripts\activate
+python venv\Scripts\activate
 ```
 
 Install the dependencies using the package manager [pip](https://pip.pypa.io/en/stable/). This should be done inside the virtual environment.
 
 ```bash
-  pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Run the migrations.
 
 ```bash
-  python manage.py runserver
+python manage.py runserver
 ```
 
 Start the server
 
 ```bash
-  python manage.py runserver
+python manage.py runserver
 ```
 
 The backend should work now and is accesible via [localhost:8000/admin](https://localhost:8000/admin)
@@ -82,7 +82,7 @@ To run this project, you will need to add the following environment variables to
 #### Get all items
 
 ```http
-  GET /api/items
+GET /api/items
 ```
 
 | Parameter | Type     | Description                |
@@ -92,7 +92,7 @@ To run this project, you will need to add the following environment variables to
 #### Get item
 
 ```http
-  GET /api/items/${id}
+GET /api/items/${id}
 ```
 
 | Parameter | Type     | Description                       |
