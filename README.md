@@ -48,7 +48,6 @@ Start the server
 ```
 
 The backend should work now and is accesible via [localhost:8000/admin](https://localhost:8000/admin)
-<a href="placeholder.com" target="_blank">Opens in new tab</a>
 
 ### Creating a admin user
 
