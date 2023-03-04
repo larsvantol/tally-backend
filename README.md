@@ -14,7 +14,7 @@ If the backend is finished, these are the features that the server has.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/larsvantol/turf.git
 ```
 
 Go to the root of the project directory and setup a virtual environment.
