@@ -29,7 +29,7 @@ Activate the virtual environment.
   python venv\Scripts\activate
 ```
 
-Install the dependencies using the package manager [pip](https://pip.pypa.io/en/stable/).
+Install the dependencies using the package manager [pip](https://pip.pypa.io/en/stable/). This should be done inside the virtual environment.
 
 ```bash
   pip install -r requirements.txt
