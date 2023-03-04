@@ -47,7 +47,7 @@ Start the server
   python manage.py runserver
 ```
 
-The backend should work now and is accesible via `localhost:8000/admin`.
+The backend should work now and is accesible via [localhost:8000/admin](https://localhost:8000/admin)
 
 ### Creating a admin user
 
