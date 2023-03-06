@@ -26,6 +26,18 @@ class Transaction(models.Model):
         for subpurchase in self.subpurchase_set.all():
             total += subpurchase.price * subpurchase.quantity
         return total
+    
+    def get_rows(self):
+        result = []
+
+        for subtransaction in self.subtransaction_set.all():
+            row = (subtransaction.description, subtransaction.amount)
+            result.append(row)
+        for subpurchase in self.subpurchase_set.all():
+            row = (f'{subpurchase.quantity}x {subpurchase.product.name}', subpurchase.price * subpurchase.quantity)
+            result.append(row)
+
+        return result
 
     def __str__(self):
         return str(self.transaction_id)
