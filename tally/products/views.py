@@ -16,3 +16,8 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    # Return products sorted by product group
+    def get_queryset(self):
+        queryset = Product.objects.all().order_by('product_group__name')
+        return queryset

@@ -11,7 +11,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     stock = models.IntegerField()
-    image_url = models.CharField(max_length=2083)
+    image_url = models.CharField(max_length=2083, blank=True)
     product_group = models.ForeignKey(ProductGroup, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):

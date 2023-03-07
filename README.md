@@ -89,31 +89,95 @@ To run this project, you will need to add the following environment variables to
 
 `ANOTHER_API_KEY`
 
-## API Reference (Dummy text)
+## API Reference
 
-#### Get all items
+### Get all products
+Returns all products ordered by product group name.
 
 ```http
-GET /api/items
+GET /products/products
 ```
+
+<details>
+
+<summary>Details</summary>
+
+#### Parameters
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 
-#### Get item
+#### Response
+
+```json
+[
+    {
+        "id": 2,
+        "name": "Lays - Paprika",
+        "price": 1.53,
+        "stock": 66,
+        "image_url": "",
+        "product_group": {
+            "id": 1,
+            "name": "Chips"
+        }
+    },
+    {
+        "id": 4,
+        "name": "Fanta",
+        "price": 7.0,
+        "stock": 985,
+        "image_url": "",
+        "product_group": {
+            "id": 2,
+            "name": "Soda"
+        }
+    }
+]
+```
+
+</details>
+
+<br>
+
+### Get specific product
+Returns the specific product that was requested.
 
 ```http
-GET /api/items/${id}
+GET /products/products/${id}
 ```
+
+<details>
+
+<summary>Details</summary>
+
+#### Parameters
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+| `api_key` | `string` | **Required**. Your API key |
+| `id`      | `string` | **Required**. Id of product to fetch |
 
-#### add(num1, num2)
+#### Response
 
-Takes two numbers and returns the sum.
+```json
+{
+    "id": 1,
+    "name": "Cola",
+    "price": 1.0,
+    "stock": 10,
+    "image_url": "",
+    "product_group": {
+        "id": 2,
+        "name": "Soda"
+    }
+}
+```
+
+</details>
+
+<br>
 
 ## Contributing (Dummy text)
 
