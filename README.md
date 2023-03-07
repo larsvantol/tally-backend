@@ -176,6 +176,48 @@ GET /products/products/${id}
 
 </details>
 
+### Create a product
+Use this endpoint to create a product.
+
+<i>Only admin users can create products.</i>
+
+```http
+POST /products/products
+```
+
+<details>
+
+<summary>Details</summary>
+
+#### Parameters
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `name`    | `string` | **Required**. Name of the product |
+| `price`   | `string` | **Required**. Price of the product |
+| `stock`   | `string` | **optional**. Initial stock of the product (0 if left empty) |
+| `image_url` | `string` | **optional**. Url to an image of the product |
+| `product_group` | `integer` | **Required**. Id of the product group that the product relates to |
+
+#### Response
+
+```json
+{
+    "id": 2,
+    "name": "Lays - Paprika",
+    "price": 1.66,
+    "stock": 66,
+    "image_url": "",
+    "product_group": {
+        "id": 1,
+        "name": "Chips"
+    }
+}
+```
+
+</details>
+
 
 ## Contributing (Dummy text)
 
