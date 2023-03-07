@@ -139,7 +139,6 @@ GET /products/products
 
 </details>
 
-<br>
 
 ### Get specific product
 Returns the specific product that was requested.
@@ -177,7 +176,6 @@ GET /products/products/${id}
 
 </details>
 
-<br>
 
 ## Contributing (Dummy text)
 
