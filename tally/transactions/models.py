@@ -14,6 +14,9 @@ class Customer(models.Model):
     def __str__(self):
         return str(self.relation_code) + " - " + self.first_name + " " + (self.prefix + " " if self.prefix else "") + self.last_name
     
+    def full_name(self):
+        return self.first_name + " " + (self.prefix + " " if self.prefix else "") + self.last_name
+    
 class Transaction(models.Model):
     transaction_id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
