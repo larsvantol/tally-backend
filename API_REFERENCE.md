@@ -1,5 +1,21 @@
 # API Reference
 
+## Table of Content
+<!-- TOC start -->
+- [Products](#products)
+  * [Get all products](#get-all-products)
+  * [Get specific product](#get-specific-product)
+  * [Create a product](#create-a-product)
+  * [Edit a product](#edit-a-product)
+  * [Delete a product](#delete-a-product)
+- [Product Groups](#product-groups)
+  * [Get all product groups](#get-all-product-groups)
+  * [Get a specific product group](#get-a-specific-product-group)
+  * [Create a product group](#create-a-product-group)
+  * [Edit a product group](#edit-a-product-group)
+  * [Delete a product group](#delete-a-product-group)
+<!-- TOC end -->
+
 ## Products
 
 ### Get all products
