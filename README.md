@@ -97,4 +97,4 @@ See [API_REFERENCE.md](API_REFERENCE.md) for the documentation of the API.
 
 Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
+See [contributing.md](contributing.md) for ways to get started.
