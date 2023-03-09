@@ -91,7 +91,7 @@ To run this project, you will need to add the following environment variables to
 
 ## API Reference
 
-See `API_REFERENCE.md` for the documentation of the API.
+See [API_REFERENCE.md](API_REFERENCE.md) for the documentation of the API.
 
 ## Contributing (Dummy text)
 
