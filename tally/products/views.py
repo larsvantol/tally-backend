@@ -8,36 +8,48 @@ from rest_framework.decorators import action
 from .models import Product, ProductGroup
 from .serializers import ProductSerializer, ProductGroupSerializer
 
+GET_LIST = "list"
+GET_RETRIEVE = "retrieve"
+POST_CREATE = "create"
+DELETE_DESTROY = "destroy"
+PUT_UPDATE = "update"
+PATCH_PARTIAL_UPDATE = "partial_update"
+
 class ProductGroupViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing product groups.
     """
+    
     queryset = ProductGroup.objects.all()
-    serializer_class = ProductGroupSerializer
+    serializer_class = ProductGroupSerializer 
 
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action == 'list':
+        
+        if self.action == GET_LIST:
+            permission_classes = [AllowAny]
+        elif self.action == GET_RETRIEVE:
+            permission_classes = [AllowAny]
+        elif self.action == POST_CREATE:
+            permission_classes = [AllowAny]
+        elif self.action == PUT_UPDATE:
+            permission_classes = [AllowAny]
+        elif self.action == DELETE_DESTROY:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
+
         return [permission() for permission in permission_classes]
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing products.
     """
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
-    def get_queryset(self):
-        """
-        Returns all products
-        """
-        queryset = Product.objects.all()
-        return queryset
 
     def list(self, request):
         """
@@ -51,10 +63,20 @@ class ProductViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action == 'list':
+
+        if self.action == GET_LIST:
             permission_classes = [AllowAny]
-        elif self.action == 'create':
+        elif self.action == GET_RETRIEVE:
+            permission_classes = [AllowAny]
+        elif self.action == POST_CREATE:
+            permission_classes = [AllowAny]
+        elif self.action == PUT_UPDATE:
+            permission_classes = [AllowAny]
+        elif self.action == PATCH_PARTIAL_UPDATE:
+            permission_classes = [AllowAny]
+        elif self.action == DELETE_DESTROY:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
+
         return [permission() for permission in permission_classes]
