@@ -5,12 +5,9 @@ Tally is the backend for tracking transactions for various products sold at the 
 - [Features](#features)
 - [Run Locally](#run-locally)
   * [Creating a admin user](#creating-a-admin-user)
-- [Environment Variables (Dummy text)](#environment-variables-dummy-text)
-- [API Reference (Dummy text)](#api-reference-dummy-text)
-    + [Get all items](#get-all-items)
-    + [Get item](#get-item)
-    + [add(num1, num2)](#addnum1-num2)
-- [Contributing (Dummy text)](#contributing-dummy-text)
+- [Environment Variables](#environment-variables)
+- [API Reference](#api-reference)
+- [Contributing](#contributing)
 <!-- TOC end -->
 
 ## Features
@@ -82,7 +79,7 @@ Superuser created successfully.
 You can now log in into the admin panel.
 
 ## Environment Variables (Dummy text)
-
+<i>Dummy text</i>
 To run this project, you will need to add the following environment variables to your .env file
 
 `API_KEY`
@@ -93,7 +90,7 @@ To run this project, you will need to add the following environment variables to
 
 See [API_REFERENCE.md](API_REFERENCE.md) for the documentation of the API.
 
-## Contributing (Dummy text)
+## Contributing
 
 Contributions are always welcome!
 
