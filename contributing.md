@@ -1,4 +1,8 @@
 # Contributing
 
 ## To Do
-API endpoint get products from certain group
+- Write tests
+- Build the stock feature
+- Sending a mail to customers with their transactions
+- API endpoint for transactions per customer per month
+- Connect with CH connect
