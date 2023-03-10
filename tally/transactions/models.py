@@ -48,7 +48,7 @@ class Transaction(models.Model):
 class SubTransaction(models.Model):
     description = models.CharField(max_length=100, help_text="""Description of the transaction.""")
     amount = models.DecimalField(max_digits=10, decimal_places=2, help_text="""Amount to be deducted.""")
-    transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE)
+    transaction = models.ForeignKey('Transaction', related_name='subtransactions', on_delete=models.CASCADE)
     
     
 class SubPurchase(models.Model):
@@ -56,9 +56,13 @@ class SubPurchase(models.Model):
     quantity = models.IntegerField(null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, help_text="""Price of the product at the time of purchase.""")
 
-    transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE)
+    transaction = models.ForeignKey('Transaction', related_name='subpurchases', on_delete=models.CASCADE)
 
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def amount(self):
+        print(f'price: {self.price}, quantity: {self.quantity} = {self.price * self.quantity}')
+        return self.price * self.quantity
 
     def __str__(self):
         return self.product.name
