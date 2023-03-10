@@ -10,6 +10,7 @@ from .serializers import ProductSerializer, ProductGroupSerializer
 
 GET_LIST = "list"
 GET_RETRIEVE = "retrieve"
+GET_PRODUCTS_FROM_GROUP = "products"
 POST_CREATE = "create"
 DELETE_DESTROY = "destroy"
 PUT_UPDATE = "update"
@@ -23,6 +24,16 @@ class ProductGroupViewSet(viewsets.ModelViewSet):
     queryset = ProductGroup.objects.all()
     serializer_class = ProductGroupSerializer 
 
+    # API endpoint that allows products to be listed per group
+    @action(detail=True, methods=['get'])
+    def products(self, request, pk=None):
+        """
+        Lists products sorted by product group
+        """
+        queryset = Product.objects.filter(product_group__id=pk).order_by('name')
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
@@ -32,6 +43,8 @@ class ProductGroupViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         elif self.action == GET_RETRIEVE:
             permission_classes = [AllowAny]
+        elif self.action == GET_PRODUCTS_FROM_GROUP:
+            permission_classes = [AllowAny]
         elif self.action == POST_CREATE:
             permission_classes = [AllowAny]
         elif self.action == PUT_UPDATE:
@@ -39,6 +52,7 @@ class ProductGroupViewSet(viewsets.ModelViewSet):
         elif self.action == DELETE_DESTROY:
             permission_classes = [AllowAny]
         else:
+            print(self.action)
             permission_classes = [IsAdminUser]
 
         return [permission() for permission in permission_classes]
