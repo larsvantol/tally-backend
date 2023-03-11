@@ -60,7 +60,7 @@
   * [Get all transactions of a customer](#get-all-transactions-of-a-customer)
     + [Parameters](#parameters-17)
     + [Response](#response-17)
-  * [Get all transactions of a customer in a specific time frame](#get-all-transactions-of-a-customer-in-a-specific-time-frame)
+    + [Get all transactions of a customer in a specific time frame](#get-all-transactions-of-a-customer-in-a-specific-time-frame)
     + [Parameters](#parameters-18)
   * [Example request](#example-request)
     + [Response](#response-18)
@@ -895,7 +895,7 @@ POST /transactions/customers/${customer_id}/transactions
 | `start_date`     | `string`  | The start date of the timeframe    | **Required**  |
 | `end_date`       | `string`  | The end date of the timeframe      | **Required**  |
 
-### Example request
+#### Example request
 
 ```json
 {
