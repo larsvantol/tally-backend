@@ -4,7 +4,7 @@ Tally is the backend for tracking transactions for various products sold at the 
 <!-- TOC start -->
 - [Features](#features)
 - [Run Locally](#run-locally)
-  * [Creating a admin user](#creating-a-admin-user)
+  * [Creating an admin user](#creating-an-admin-user)
 - [Environment Variables](#environment-variables)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
@@ -58,7 +58,7 @@ python manage.py runserver
 
 The backend should work now and is accesible via [localhost:8000/admin](https://localhost:8000/admin)
 
-### Creating a admin user
+### Creating an admin user
 
 To log in into the backend you should have a user account with admin privileges. If you don't have an account yet you should create one by following the steps below:
 
