@@ -5,9 +5,9 @@ import uuid
 # Create your models here.
 class Customer(models.Model):
     first_name = models.CharField(max_length=100)
-    prefix = models.CharField(max_length=100, null=True)
+    prefix = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100)
-    relation_code = models.IntegerField(null=True)
+    relation_code = models.IntegerField(help_text="""Relation code of the customer.""", unique=True)
 
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -24,23 +24,11 @@ class Transaction(models.Model):
 
     def total(self):
         total = 0
-        for subtransaction in self.subtransaction_set.all():
+        for subtransaction in SubTransaction.objects.filter(transaction=self.transaction_id):
             total += subtransaction.amount
-        for subpurchase in self.subpurchase_set.all():
+        for subpurchase in SubPurchase.objects.filter(transaction=self.transaction_id):
             total += subpurchase.price * subpurchase.quantity
         return total
-    
-    def get_rows(self):
-        result = []
-
-        for subtransaction in self.subtransaction_set.all():
-            row = (subtransaction.description, subtransaction.amount)
-            result.append(row)
-        for subpurchase in self.subpurchase_set.all():
-            row = (f'{subpurchase.quantity}x {subpurchase.product.name}', subpurchase.price * subpurchase.quantity)
-            result.append(row)
-
-        return result
 
     def __str__(self):
         return str(self.transaction_id)
@@ -48,7 +36,10 @@ class Transaction(models.Model):
 class SubTransaction(models.Model):
     description = models.CharField(max_length=100, help_text="""Description of the transaction.""")
     amount = models.DecimalField(max_digits=10, decimal_places=2, help_text="""Amount to be deducted.""")
-    transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE)
+    transaction = models.ForeignKey('Transaction', related_name='subtransactions', on_delete=models.CASCADE)
+
+    def summary(self) -> tuple:
+        return (self.description, self.amount)
     
     
 class SubPurchase(models.Model):
@@ -56,9 +47,21 @@ class SubPurchase(models.Model):
     quantity = models.IntegerField(null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, help_text="""Price of the product at the time of purchase.""")
 
-    transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE)
+    transaction = models.ForeignKey('Transaction', related_name='subpurchases', on_delete=models.CASCADE)
 
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def amount(self):
+        print(f'price: {self.price}, quantity: {self.quantity} = {self.price * self.quantity}')
+        return self.price * self.quantity
+    
+    def summary(self) -> tuple:
+        return (f'{self.quantity}x {self.product.name}', self.amount())
+    
+    def save(self, *args, **kwargs):
+        if not self.price:
+            self.price = self.product.price
+        super(SubPurchase, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.product.name
