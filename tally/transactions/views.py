@@ -34,8 +34,10 @@ class CustomerViewSet(viewsets.ModelViewSet):
             serializer = TransactionSerializer(queryset, many=True)
             return Response(serializer.data)
         elif request.method == 'POST':
-            if 'start_date' not in request.data or 'end_date' not in request.data:
-                return Response('Missing start_date or end_date', status=400)
+            if 'start_date' not in request.data:
+                return Response('Missing start_date', status=400)
+            if 'end_date' not in request.data:
+                return Response('Missing end_date', status=400)
             
             start_date = request.data.get('start_date')
             end_date = request.data.get('end_date')
