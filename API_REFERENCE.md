@@ -810,7 +810,6 @@ GET /transactions/customers/${customer_id}
 
 </details>
 
-
 ### Get all transactions of a customer
 
 Use this endpoint to get an all transactions of a customer.
@@ -870,7 +869,6 @@ GET /transactions/customers/${customer_id}/transactions
 ```
 
 </details>
-
 
 ### Create a customer
 

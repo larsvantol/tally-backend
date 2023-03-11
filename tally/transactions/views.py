@@ -21,7 +21,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing customers.
     """
-
+    
     @action(detail=True, methods=['get'])
     def transactions(self, request, pk=None):
         """
