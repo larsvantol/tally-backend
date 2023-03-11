@@ -293,6 +293,66 @@ GET /products/product_groups/${id}
 
 </details>
 
+### Get all products in a product group
+Returns a list of all products in a certain product group.
+
+```http
+GET /products/product_groups/${id}/products
+```
+
+<details>
+
+<summary>Details</summary>
+
+#### Parameters
+
+| Parameter | Type     | Description                       | Required     |
+| :-------- | :------- | :-------------------------------- | :-------     |
+| `api_key` | `string` | Your API key                      | **Required** |
+| `id`      | `string` | Id of product group to fetch      | **Required** |
+
+#### Response
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Cola",
+        "price": 5.21,
+        "stock": 788,
+        "image_url": "",
+        "product_group": {
+            "id": 1,
+            "name": "Chips"
+        }
+    },
+    {
+        "id": 3,
+        "name": "Lays - Naturel",
+        "price": 8.2,
+        "stock": 788,
+        "image_url": "",
+        "product_group": {
+            "id": 1,
+            "name": "Chips"
+        }
+    },
+    {
+        "id": 2,
+        "name": "Lays - Paprika",
+        "price": 1.66,
+        "stock": 66,
+        "image_url": "",
+        "product_group": {
+            "id": 1,
+            "name": "Chips"
+        }
+    }
+]
+```
+
+</details>
+
 ### Create a product group
 
 Use this endpoint to create a product group.
