@@ -27,8 +27,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
         """
         Lists transactions for a customer
         """
-        customer = self.get_object()
-        queryset = Transaction.objects.filter(customer=customer)
+        
+        queryset = Transaction.objects.filter(customer__id=pk).order_by('date_created')
         serializer = TransactionSerializer(queryset, many=True)
         return Response(serializer.data)
     
