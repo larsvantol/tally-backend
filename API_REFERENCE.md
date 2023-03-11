@@ -4,16 +4,69 @@
 <!-- TOC start -->
 - [Products](#products)
   * [Get all products](#get-all-products)
+    + [Parameters](#parameters)
+    + [Response](#response)
   * [Get specific product](#get-specific-product)
+    + [Parameters](#parameters-1)
+    + [Response](#response-1)
   * [Create a product](#create-a-product)
+    + [Parameters](#parameters-2)
+    + [Response](#response-2)
   * [Edit a product](#edit-a-product)
+    + [Parameters](#parameters-3)
+    + [Response](#response-3)
   * [Delete a product](#delete-a-product)
+    + [Parameters](#parameters-4)
+    + [Response](#response-4)
 - [Product Groups](#product-groups)
   * [Get all product groups](#get-all-product-groups)
+    + [Parameters](#parameters-5)
+    + [Response](#response-5)
   * [Get a specific product group](#get-a-specific-product-group)
+    + [Parameters](#parameters-6)
+    + [Response](#response-6)
+  * [Get all products in a product group](#get-all-products-in-a-product-group)
+    + [Parameters](#parameters-7)
+    + [Response](#response-7)
   * [Create a product group](#create-a-product-group)
+    + [Parameters](#parameters-8)
+    + [Response](#response-8)
   * [Edit a product group](#edit-a-product-group)
+    + [Parameters](#parameters-9)
+    + [Response](#response-9)
   * [Delete a product group](#delete-a-product-group)
+    + [Parameters](#parameters-10)
+    + [Response](#response-10)
+- [Transactions](#transactions)
+  * [Get all transactions](#get-all-transactions)
+    + [Parameters](#parameters-11)
+    + [Response](#response-11)
+  * [Get a specific transaction](#get-a-specific-transaction)
+    + [Parameters](#parameters-12)
+    + [Response](#response-12)
+  * [Create a transaction](#create-a-transaction)
+    + [Parameters](#parameters-13)
+    + [Response](#response-13)
+  * [Delete a specific transaction](#delete-a-specific-transaction)
+    + [Parameters](#parameters-14)
+    + [Response](#response-14)
+- [Customers](#customers)
+  * [Get all customers](#get-all-customers)
+    + [Parameters](#parameters-15)
+    + [Response](#response-15)
+  * [Get a specific customer](#get-a-specific-customer)
+    + [Parameters](#parameters-16)
+    + [Response](#response-16)
+  * [Get all transactions of a customer](#get-all-transactions-of-a-customer)
+    + [Parameters](#parameters-17)
+    + [Response](#response-17)
+  * [Create a customer](#create-a-customer)
+    + [Parameters](#parameters-18)
+    + [Example request](#example-request)
+    + [Response](#response-18)
+  * [Delete a customer](#delete-a-customer)
+    + [Parameters](#parameters-19)
+    + [Response](#response-19)
 <!-- TOC end -->
 
 ## Products
@@ -757,6 +810,65 @@ GET /transactions/customers/${customer_id}
 
 </details>
 
+### Get all transactions of a customer
+
+Use this endpoint to get an all transactions of a customer.
+
+```http
+GET /transactions/customers/${customer_id}/transactions
+```
+
+<details>
+
+<summary>Details</summary>
+
+#### Parameters
+
+| Parameter        | Type      | Description                        | Required      |
+| :--------------- | :-------  | :--------------------------------  | :-------      |
+| `api_key`        | `string`  | Your API key                       | **Required**  |
+| `customer_id`    | `string`  | The customer id                    | **Required**  |
+
+#### Response
+
+```json
+[
+    {
+        "transaction_id": "4d4c46a5-3ced-49d9-a6c1-63354aa8c4ba",
+        "customer": 1,
+        "date_created": "2023-03-11T21:02:00.499137Z",
+        "subtransactions": [],
+        "subpurchases": [
+            {
+                "product": 1,
+                "quantity": 1,
+                "price": "5.21",
+                "amount": 5.21
+            },
+            {
+                "product": 2,
+                "quantity": 2,
+                "price": "3.11",
+                "amount": 6.22
+            }
+        ]
+    },
+    {
+        "transaction_id": "e5eeb9dd-6937-4a7d-a365-fac1f53d6dbc",
+        "customer": 1,
+        "date_created": "2023-03-11T21:02:54.764917Z",
+        "subtransactions": [
+            {
+                "description": "AV Eten",
+                "amount": "10.66"
+            }
+        ],
+        "subpurchases": []
+    }
+]
+```
+
+</details>
 
 ### Create a customer
 

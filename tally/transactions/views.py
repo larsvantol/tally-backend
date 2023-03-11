@@ -11,6 +11,7 @@ from .serializers import CustomerSerializer, TransactionSerializer
 GET_LIST = "list"
 GET_RETRIEVE = "retrieve"
 GET_TRANSACTION_ROWS = "rows"
+GET_CUSTOMER_TRANSACTIONS = "transactions"
 POST_CREATE = "create"
 DELETE_DESTROY = "destroy"
 PUT_UPDATE = "update"
@@ -20,6 +21,16 @@ class CustomerViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing customers.
     """
+    
+    @action(detail=True, methods=['get'])
+    def transactions(self, request, pk=None):
+        """
+        Lists transactions for a customer
+        """
+        
+        queryset = Transaction.objects.filter(customer__id=pk).order_by('date_created')
+        serializer = TransactionSerializer(queryset, many=True)
+        return Response(serializer.data)
     
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer 
@@ -32,6 +43,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
         if self.action == GET_LIST:
             permission_classes = [AllowAny]
         elif self.action == GET_RETRIEVE:
+            permission_classes = [AllowAny]
+        elif self.action == GET_CUSTOMER_TRANSACTIONS:
             permission_classes = [AllowAny]
         elif self.action == POST_CREATE:
             permission_classes = [AllowAny]
