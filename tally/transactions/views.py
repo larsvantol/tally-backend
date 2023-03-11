@@ -5,19 +5,16 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from .models import Customer, Transaction, SubPurchase
-from .serializers import CustomerSerializer, TransactionSerializer, SubPurchaseSerializer
+from .models import Customer, Transaction
+from .serializers import CustomerSerializer, TransactionSerializer
 
 GET_LIST = "list"
 GET_RETRIEVE = "retrieve"
+GET_TRANSACTION_ROWS = "rows"
 POST_CREATE = "create"
 DELETE_DESTROY = "destroy"
 PUT_UPDATE = "update"
 PATCH_PARTIAL_UPDATE = "partial_update"
-
-class SubPurchaseViewSet(viewsets.ModelViewSet):
-    queryset = SubPurchase.objects.all()
-    serializer_class = SubPurchaseSerializer
 
 class CustomerViewSet(viewsets.ModelViewSet):
     """
@@ -72,6 +69,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         elif self.action == GET_RETRIEVE:
             permission_classes = [AllowAny]
+        elif self.action == GET_TRANSACTION_ROWS:
+            permission_classes = [AllowAny]
         elif self.action == POST_CREATE:
             permission_classes = [AllowAny]
         elif self.action == PUT_UPDATE:
@@ -81,6 +80,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         elif self.action == DELETE_DESTROY:
             permission_classes = [AllowAny]
         else:
+            print(self.action)
             permission_classes = [IsAdminUser]
 
         return [permission() for permission in permission_classes]
