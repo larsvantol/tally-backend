@@ -60,13 +60,17 @@
   * [Get all transactions of a customer](#get-all-transactions-of-a-customer)
     + [Parameters](#parameters-17)
     + [Response](#response-17)
-  * [Create a customer](#create-a-customer)
+  * [Get all transactions of a customer in a specific time frame](#get-all-transactions-of-a-customer-in-a-specific-time-frame)
     + [Parameters](#parameters-18)
-    + [Example request](#example-request)
+  * [Example request](#example-request)
     + [Response](#response-18)
-  * [Delete a customer](#delete-a-customer)
+  * [Create a customer](#create-a-customer)
     + [Parameters](#parameters-19)
+    + [Example request](#example-request-1)
     + [Response](#response-19)
+  * [Delete a customer](#delete-a-customer)
+    + [Parameters](#parameters-20)
+    + [Response](#response-20)
 <!-- TOC end -->
 
 ## Products
@@ -864,6 +868,65 @@ GET /transactions/customers/${customer_id}/transactions
             }
         ],
         "subpurchases": []
+    }
+]
+```
+
+</details>
+
+### Get all transactions of a customer in a specific time frame
+
+Use this endpoint to get all transactions of a customer in a specific time frame
+
+```http
+POST /transactions/customers/${customer_id}/transactions
+```
+
+<details>
+
+<summary>Details</summary>
+
+#### Parameters
+
+| Parameter        | Type      | Description                        | Required      |
+| :--------------- | :-------  | :--------------------------------  | :-------      |
+| `api_key`        | `string`  | Your API key                       | **Required**  |
+| `customer_id`    | `string`  | The customer id                    | **Required**  |
+| `start_date`     | `string`  | The start date of the timeframe    | **Required**  |
+| `end_date`       | `string`  | The end date of the timeframe      | **Required**  |
+
+### Example request
+
+```json
+{
+    "start_date": "2023-03-10T21:02:54.764917Z",
+    "end_date": "2023-03-11T21:02:44.764917Z"
+}
+```
+
+#### Response
+
+```json
+[
+    {
+        "transaction_id": "4d4c46a5-3ced-49d9-a6c1-63354aa8c4ba",
+        "customer": 1,
+        "date_created": "2023-03-11T21:02:00.499137Z",
+        "subtransactions": [],
+        "subpurchases": [
+            {
+                "product": 1,
+                "quantity": 1,
+                "price": "5.21",
+                "amount": 5.21
+            },
+            {
+                "product": 2,
+                "quantity": 2,
+                "price": "3.11",
+                "amount": 6.22
+            }
+        ]
     }
 ]
 ```

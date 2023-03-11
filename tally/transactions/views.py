@@ -22,15 +22,28 @@ class CustomerViewSet(viewsets.ModelViewSet):
     A simple ViewSet for viewing and editing customers.
     """
     
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['get', 'post'])
     def transactions(self, request, pk=None):
         """
         Lists transactions for a customer
         """
         
-        queryset = Transaction.objects.filter(customer__id=pk).order_by('date_created')
-        serializer = TransactionSerializer(queryset, many=True)
-        return Response(serializer.data)
+        # Check if method is GET
+        if request.method == 'GET':
+            queryset = Transaction.objects.filter(customer__id=pk).order_by('date_created')
+            serializer = TransactionSerializer(queryset, many=True)
+            return Response(serializer.data)
+        elif request.method == 'POST':
+            if 'start_date' not in request.data or 'end_date' not in request.data:
+                return Response('Missing start_date or end_date', status=400)
+            
+            start_date = request.data.get('start_date')
+            end_date = request.data.get('end_date')
+
+            queryset = Transaction.objects.filter(customer__id=pk, 
+                                                  date_created__range=[start_date, end_date]).order_by('date_created')
+            serializer = TransactionSerializer(queryset, many=True)
+            return Response(serializer.data)
     
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer 
