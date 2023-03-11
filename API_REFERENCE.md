@@ -698,6 +698,67 @@ GET /transactions/customers/${customer_id}
 </details>
 
 
+### Get all transactions of a customer
+
+Use this endpoint to get an all transactions of a customer.
+
+```http
+GET /transactions/customers/${customer_id}/transactions
+```
+
+<details>
+
+<summary>Details</summary>
+
+#### Parameters
+
+| Parameter        | Type      | Description                        | Required      |
+| :--------------- | :-------  | :--------------------------------  | :-------      |
+| `api_key`        | `string`  | Your API key                       | **Required**  |
+| `customer_id`    | `string`  | The customer id                    | **Required**  |
+
+#### Response
+
+```json
+[
+    {
+        "transaction_id": "4d4c46a5-3ced-49d9-a6c1-63354aa8c4ba",
+        "customer": 1,
+        "date_created": "2023-03-11T21:02:00.499137Z",
+        "subtransactions": [],
+        "subpurchases": [
+            {
+                "product": 1,
+                "quantity": 1,
+                "price": "5.21",
+                "amount": 5.21
+            },
+            {
+                "product": 2,
+                "quantity": 2,
+                "price": "3.11",
+                "amount": 6.22
+            }
+        ]
+    },
+    {
+        "transaction_id": "e5eeb9dd-6937-4a7d-a365-fac1f53d6dbc",
+        "customer": 1,
+        "date_created": "2023-03-11T21:02:54.764917Z",
+        "subtransactions": [
+            {
+                "description": "AV Eten",
+                "amount": "10.66"
+            }
+        ],
+        "subpurchases": []
+    }
+]
+```
+
+</details>
+
+
 ### Create a customer
 
 Use this endpoint to create a customer.
