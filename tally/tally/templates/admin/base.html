@@ -1,0 +1,26 @@
+{% extends 'admin/base.html' %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+:root {
+
+    --ch-black: 	rgb(0,0,0);
+    --ch-white: 	rgb(255,255,255);
+    --ch-indigo: 	rgb(0,39,74);
+    --ch-blue: 	    rgb(144,182,203);
+    --ch-magenta: 	rgb(232,48,138);
+    --ch-orange: 	rgb(238,114,3);
+    --ch-yellow: 	rgb(251, 187, 33);
+    --ch-turqoise: 	rgb(42, 161, 169);
+
+  /* --primary: #9774d5;
+  --secondary: #785cab;
+  --link-fg: #7c449b;
+  --link-selected-fg: #8f5bb2; */
+    --accent: var(--ch-white);
+    --primary: var(--ch-indigo);
+    --secondary: var(--ch-blue);
+    --selected-row: rgb(190, 209, 219);
+}
+</style>
+{% endblock %}
