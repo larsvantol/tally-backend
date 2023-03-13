@@ -30,16 +30,46 @@ class StockFilter(admin.SimpleListFilter):
 
 class ProductGroupAdmin(admin.ModelAdmin):
     list_display = ('name',)
+    search_fields = ('name',)
+    fieldsets = (
+        ('Name', {
+            'fields': ('name',)
+        }),
+        ('Meta', {
+            'fields': ('created', 'last_modified')
+        }),
+    )
+    readonly_fields = ('created', 'last_modified')
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'product_group_formatted', 'price_formatted', 'stock')
     list_filter = ('product_group', StockFilter)
+    search_fields = ('name',)
+    fieldsets = (
+        ('Name', {
+            'fields': ('name', 'product_group')
+        }),
+        ('Details', {
+            'fields': ('price', 'stock', 'image_url')
+        }),
+        ('Meta', {
+            'fields': ('created', 'last_modified')
+        }),
+    )
+    readonly_fields = ('created', 'last_modified')
 
+    @admin.display(description='Price')
     def price_formatted(self, obj):
-        # format price as €xx.xx
+        """
+        Formats the price of the product as €xx.xx
+        """
         return f'€ {obj.price:.2f}'
     
+    @admin.display(description='Product group')
     def product_group_formatted(self, obj):
+        """
+        Formats the product group. It returns a link to the products filtered on the specific product group
+        """
         # formats the product group with a link to the group filter
         return format_html(f'<a href="?product_group__id__exact={obj.product_group.id}">{obj.product_group.name}</a>')
 

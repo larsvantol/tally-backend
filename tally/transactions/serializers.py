@@ -27,7 +27,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ['transaction_id', 'customer', 'date_created', 'subtransactions', 'subpurchases']
+        fields = ['transaction_id', 'customer', 'date', 'subtransactions', 'subpurchases']
 
     def create(self, validated_data):
         if not validated_data.get('subtransactions') and not validated_data.get('subpurchases'):

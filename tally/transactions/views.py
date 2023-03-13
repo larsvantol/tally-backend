@@ -30,7 +30,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         
         # Check if method is GET
         if request.method == 'GET':
-            queryset = Transaction.objects.filter(customer__id=pk).order_by('date_created')
+            queryset = Transaction.objects.filter(customer__id=pk).order_by('date')
             serializer = TransactionSerializer(queryset, many=True)
             return Response(serializer.data)
         elif request.method == 'POST':
@@ -43,7 +43,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
             end_date = request.data.get('end_date')
 
             queryset = Transaction.objects.filter(customer__id=pk, 
-                                                  date_created__range=[start_date, end_date]).order_by('date_created')
+                                                  date__range=[start_date, end_date]).order_by('date')
             serializer = TransactionSerializer(queryset, many=True)
             return Response(serializer.data)
     
@@ -84,7 +84,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         """
         Lists products sorted by product group
         """
-        queryset = self.get_queryset().order_by('date_created')
+        queryset = self.get_queryset().order_by('date')
         serializer = TransactionSerializer(queryset, many=True)
         return Response(serializer.data)
     

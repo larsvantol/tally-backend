@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from products.models import Product
 import uuid
 
@@ -9,7 +10,8 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=100)
     relation_code = models.IntegerField(help_text="""Relation code of the customer.""", unique=True)
 
-    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.relation_code) + " - " + self.first_name + " " + (self.prefix + " " if self.prefix else "") + self.last_name
@@ -20,7 +22,10 @@ class Customer(models.Model):
 class Transaction(models.Model):
     transaction_id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
-    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    date = models.DateTimeField(default=timezone.now(), help_text="""Date of the transaction.""")
+
+    created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def total(self):
         total = 0
@@ -38,6 +43,9 @@ class SubTransaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, help_text="""Amount to be deducted.""")
     transaction = models.ForeignKey('Transaction', related_name='subtransactions', on_delete=models.CASCADE)
 
+    created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
     def summary(self) -> tuple:
         return (self.description, self.amount)
     
@@ -49,7 +57,8 @@ class SubPurchase(models.Model):
 
     transaction = models.ForeignKey('Transaction', related_name='subpurchases', on_delete=models.CASCADE)
 
-    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     def amount(self):
         print(f'price: {self.price}, quantity: {self.quantity} = {self.price * self.quantity}')
