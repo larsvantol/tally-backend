@@ -11,6 +11,7 @@ class ProductGroup(models.Model):
         return self.name
 
 class Product(models.Model):
+    article_number = models.IntegerField()
     name = models.CharField(max_length=100)
     price = models.FloatField()
     stock = models.IntegerField()
