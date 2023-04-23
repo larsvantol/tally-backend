@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 
-from .makro_bonnen import read_makro_invoice, to_list
+from .makro_bonnen import filter_list, read_makro_invoice, to_list
 from .models import Product, ProductGroup
 from django.views.generic.detail import DetailView
 from django.contrib.admin import AdminSite
@@ -54,9 +54,9 @@ class PDF_upload(forms.Form):
     upload_makro_invoice = forms.FileField()
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('article_number','name', 'product_group_formatted', 'price_formatted', 'stock')
+    list_display = ('article_number','name', 'product_group_formatted', 'price_formatted', 'stock', 'image_tag')
     list_filter = ('product_group', StockFilter)
-    search_fields = ('name',)
+    search_fields = ('name', 'article_number')
     fieldsets = (
         ('Name', {
             'fields': ('article_number', 'name', 'product_group')
@@ -69,6 +69,9 @@ class ProductAdmin(admin.ModelAdmin):
         }),
     )
     readonly_fields = ('created', 'last_modified')
+
+    def image_tag(self,obj):
+        return format_html('<img src="{0}" style="width: 45px; height:45px; object-fit: contain;" />'.format(obj.image_url))
 
     def get_urls(self):
         urls = super().get_urls()
@@ -104,15 +107,26 @@ class ProductAdmin(admin.ModelAdmin):
             prod_forms = ProductFormSet(data=request.POST)
 
             if prod_forms.is_valid():
-                prod_forms.save()
-                return redirect(reverse("admin:index"))
+                for form in prod_forms:
+                    try:
+                        product = form.save(commit=False)
+                        try:
+                            ex_product = Product.objects.get(article_number= product.article_number)
+                            ex_product.stock = ex_product.stock + product.stock
+                            ex_product.price = product.price
+                            ex_product.save()
+                        except Product.DoesNotExist:
+                            form.save()
+                    except:
+                        continue
+                return redirect("/admin/products/product")
             else:
                 print(prod_forms)
 
         admin_site: AdminSite = site
         context = admin_site.each_context(request)
         if request.session['makro_items']:
-            formset = ProductFormSet(initial=request.session['makro_items'])
+            formset = ProductFormSet(initial=filter_list(request.session['makro_items']), queryset=Product.objects.none())
             formset.extra = len(request.session['makro_items'])
             context['product_formset'] = formset
         else:

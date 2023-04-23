@@ -11,6 +11,8 @@ from pdfminer.pdfparser import PDFParser
 
 from io import StringIO
 
+from .models import Product
+
 
 def read_makro_invoice(pdf_file):
         output_string = StringIO()
@@ -95,11 +97,31 @@ def read_makro_invoice(pdf_file):
 def to_list(df):
     result = []
     for index, row in df.iterrows():
-        result.append({
-            "article_number": int(row['Artikelnummer']),
-            "name": row['Artikelomschrijving'], 
-            "price": float(row['Prijs st/kg'].replace(',','.')), 
-            "stock": int(float(row['Stuks per eenheid'].replace(',','.'))*int(row['Aantal'])),
-            "product_group": 1
-        })
+        try:
+            result.append({
+                "article_number": int(row['Artikelnummer']),
+                "name": row['Artikelomschrijving'], 
+                "price": float(row['Prijs st/kg'].replace(',','.')), 
+                "stock": int(float(row['Stuks per eenheid'].replace(',','.'))*int(row['Aantal'])),
+                "product_group": 1
+            })
+        except:
+            continue
     return result
+
+def filter_list(list):
+    final_list = []
+    for item in list:
+        try:
+            product = Product.objects.get(article_number=item['article_number'])
+            new_item = {
+                'article_number': product.article_number, 
+                'name': product.name, 
+                'price': product.price, 
+                'stock': item['stock'], 
+                'product_group': product.product_group
+            }
+            final_list.append(new_item)
+        except Product.DoesNotExist:
+            final_list.append(item)
+    return final_list
