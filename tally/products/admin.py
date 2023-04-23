@@ -54,7 +54,7 @@ class PDF_upload(forms.Form):
     upload_makro_invoice = forms.FileField()
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('article_number','name', 'product_group_formatted', 'price_formatted', 'stock', 'image_tag')
+    list_display = ('article_number','name', 'product_group_formatted', 'price_formatted', 'stock', 'image')
     list_filter = ('product_group', StockFilter)
     search_fields = ('name', 'article_number')
     fieldsets = (
@@ -70,7 +70,7 @@ class ProductAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('created', 'last_modified')
 
-    def image_tag(self,obj):
+    def image(self,obj):
         return format_html('<img src="{0}" style="width: 45px; height:45px; object-fit: contain;" />'.format(obj.image_url))
 
     def get_urls(self):
