@@ -44,16 +44,19 @@ class Transaction(models.Model):
         # TODO: make setting for betalingsconditie (DS)
         result = [[1, f"tally transaction {self.transaction_id}", self.date.strftime('%d-%m-%Y'), "DS", self.customer.relation_code]]
         for subtransaction in SubTransaction.objects.filter(transaction=self.transaction_id):
-            result.append(["", "", "", "", "",8310, subtransaction.description, "", 0, subtransaction.amount])
+            result.append(["", "", "", "", "", subtransaction.account_code, subtransaction.description, "", subtransaction.vat_code, subtransaction.amount])
         for subpurchase in SubPurchase.objects.filter(transaction=self.transaction_id):
-            result.append(["", "", "", "", "",8310, subpurchase.product.name, subpurchase.quantity, 0, subpurchase.amount()])
+            result.append(["", "", "", "", "", subpurchase.product.account_code, subpurchase.product.name, subpurchase.quantity, subtransaction.vat_code, subpurchase.amount()])
         return result
 
     
 class SubTransaction(models.Model):
     description = models.CharField(max_length=100, help_text="""Description of the transaction.""")
     amount = models.DecimalField(max_digits=10, decimal_places=2, help_text="""Amount to be deducted.""")
+    account_code = models.IntegerField(default=3002, help_text="""account code (grootboekrekeningnummer) for income""")   # TODO: make default account code a setting
+    vat_code = models.CharField(max_length=3, help_text="""BTW code of the transaction.""", default="0") # TODO: make default account code a setting
     transaction = models.ForeignKey('Transaction', related_name='subtransactions', on_delete=models.CASCADE)
+
 
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
