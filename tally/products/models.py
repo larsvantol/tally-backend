@@ -15,7 +15,7 @@ class Product(models.Model):
     price = models.FloatField()
     stock = models.IntegerField()
     account_code = models.IntegerField(default=8310, help_text="""account code (grootboekrekeningnummer)for income""") # TODO: make default account code a setting
-    vat_code = models.CharField(max_length=3, help_text="""BTW code of the transaction.""", default="0") # TODO: make default account code a setting
+    vat_percentage = models.IntegerField(help_text="""BTW percentage of the transaction.""", default=0) # TODO: make default percentage code a setting
     image_url = models.CharField(max_length=2083, blank=True)
     product_group = models.ForeignKey(ProductGroup, null=True, on_delete=models.SET_NULL)
 
