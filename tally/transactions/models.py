@@ -46,7 +46,7 @@ class Transaction(models.Model):
         for subtransaction in SubTransaction.objects.filter(transaction=self.transaction_id):
             result.append(["", "", "", "", "", subtransaction.account_code, subtransaction.description, "", subtransaction.vat_code, subtransaction.amount])
         for subpurchase in SubPurchase.objects.filter(transaction=self.transaction_id):
-            result.append(["", "", "", "", "", subpurchase.product.account_code, subpurchase.product.name, subpurchase.quantity, subtransaction.vat_code, subpurchase.amount()])
+            result.append(["", "", "", "", "", subpurchase.product.account_code, subpurchase.product.name, subpurchase.quantity, subpurchase.vat_code, subpurchase.amount()])
         return result
 
     
