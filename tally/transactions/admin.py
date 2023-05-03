@@ -64,7 +64,7 @@ def export_to_csv(self, request, queryset):
 
     response = HttpResponse(
     content_type="text/csv",
-    headers={"Content-Disposition": 'attachment; filename="somefilename.csv"'},
+    headers={"Content-Disposition": 'attachment; filename="export.csv"'},
     )
     
     writer = csv.writer(response)
