@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from django.http import HttpResponse
 from datetime import datetime
 from .models import Customer, Transaction, SubTransaction, SubPurchase
+import csv
 
 # Filter transactions based on dates, day, month, year
 class TransactionDateListFilter(admin.SimpleListFilter):
@@ -52,6 +54,27 @@ class CustomerAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('created', 'last_modified')
 
+
+@admin.action(description='Export to csv')
+def export_to_csv(self, request, queryset):
+    result = []
+    for transaction in queryset:
+        for line in transaction.export_to_list_exact_format():
+            result.append(line)
+
+    response = HttpResponse(
+    content_type="text/csv",
+    headers={"Content-Disposition": 'attachment; filename="somefilename.csv"'},
+    )
+    
+    writer = csv.writer(response)
+    writer.writerow(['nieuwe boeking', 'Omschrijving: Kopregel', 'Factuurdatum', 'Code betalingsconditie', 'Relatiecode', 'Grootboekrekening', 'Omschrijving', 'Aantal', 'Btw-code', 'Bedrag'])
+    for line in result:
+        writer.writerow(line)
+
+    return response
+
+
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('transaction_id', 'customer_formatted', 'date', 'total_formatted')
     ordering = ('-date',)
@@ -59,6 +82,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = (TransactionDateListFilter,)
     inlines = [SubTransactionInline, SubPurchaseInline]
     autocomplete_fields = ['customer']
+    actions = [export_to_csv]
     fieldsets = (
         ('Information', {
             'fields': ('transaction_id', 'date', 'customer')
@@ -77,6 +101,8 @@ class TransactionAdmin(admin.ModelAdmin):
     def customer_formatted(self, obj):
         link = reverse(f'admin:{obj.customer._meta.app_label}_{obj.customer._meta.model_name}_change', args=[obj.customer.id])
         return format_html('<a href="{}">{}</a>', link, str(obj.customer))
+
+    
 
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Transaction, TransactionAdmin)
