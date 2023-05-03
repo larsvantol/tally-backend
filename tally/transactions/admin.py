@@ -59,18 +59,16 @@ class CustomerAdmin(admin.ModelAdmin):
 def export_to_csv(self, request, queryset):
     result = []
     for transaction in queryset:
-        for line in transaction.export_to_list_exact_format():
-            result.append(line)
+        result.extend(transaction.export_to_list_exact_format())
 
     response = HttpResponse(
     content_type="text/csv",
-    headers={"Content-Disposition": 'attachment; filename="export.csv"'},
+    headers={"Content-Disposition": 'attachment; filename="export.csv"'}, # TODO: Filename based on export date range and/or settings
     )
     
     writer = csv.writer(response)
     writer.writerow(['nieuwe boeking', 'Omschrijving: Kopregel', 'Factuurdatum', 'Code betalingsconditie', 'Relatiecode', 'Grootboekrekening', 'Omschrijving', 'Aantal', 'Btw-code', 'Bedrag'])
-    for line in result:
-        writer.writerow(line)
+    writer.writerows(result)
 
     return response
 
