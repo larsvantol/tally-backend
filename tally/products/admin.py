@@ -54,7 +54,7 @@ class PDF_upload(forms.Form):
     upload_makro_invoice = forms.FileField()
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('article_number','name', 'product_group_formatted', 'price_formatted', 'stock', 'image')
+    list_display = ('article_number','name', 'product_group_formatted', 'price_formatted', 'vat_percentage_formatted', 'stock', 'account_code','image')
     list_filter = ('product_group', StockFilter)
     search_fields = ('name', 'article_number')
     fieldsets = (
@@ -149,6 +149,12 @@ class ProductAdmin(admin.ModelAdmin):
         """
         # formats the product group with a link to the group filter
         return format_html(f'<a href="?product_group__id__exact={obj.product_group.id}">{obj.product_group.name}</a>')
+
+    def vat_percentage_formatted(self, obj):
+        """
+        Formats the vat percentage of the product as xx%
+        """
+        return f'{obj.vat_percentage}%'
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductGroup, ProductGroupAdmin)
