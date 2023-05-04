@@ -29,7 +29,7 @@ git clone https://github.com/larsvantol/tally-backend.git
 Go to the root of the project directory and setup a virtual environment.
 
 ```bash
-python venv venv
+python -m venv venv
 ```
 
 Activate the virtual environment.
