@@ -23,7 +23,7 @@ If the backend is finished, these are the features that the server has.
 Clone the project
 
 ```bash
-git clone https://github.com/larsvantol/turf.git
+git clone https://github.com/larsvantol/tally-backend.git
 ```
 
 Go to the root of the project directory and setup a virtual environment.
