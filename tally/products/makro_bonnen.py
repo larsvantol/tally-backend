@@ -103,7 +103,8 @@ def to_list(df):
                 "name": row['Artikelomschrijving'], 
                 "price": float(row['Prijs st/kg'].replace(',','.')), 
                 "stock": int(float(row['Stuks per eenheid'].replace(',','.'))*int(row['Aantal'])),
-                "product_group": 1
+                "product_group": 1,
+                "vat_percentage": row['BTW']
             })
         except:
             continue
@@ -119,7 +120,8 @@ def filter_list(list):
                 'name': product.name, 
                 'price': product.price, 
                 'stock': item['stock'], 
-                'product_group': product.product_group
+                'product_group': product.product_group,
+                'vat_percentage': product.vat_percentage
             }
             final_list.append(new_item)
         except Product.DoesNotExist:

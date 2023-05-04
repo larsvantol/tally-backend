@@ -100,7 +100,7 @@ class ProductAdmin(admin.ModelAdmin):
     
     def add_bulk(self, request):
         ProductFormSet = forms.modelformset_factory(
-            Product, fields=("article_number", "name", "price", "stock", "image_url", "product_group")
+            Product, fields=("article_number", "name", "price", "stock", "image_url", "product_group", "vat_percentage")
         )
 
         if request.method == "POST":
