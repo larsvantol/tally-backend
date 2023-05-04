@@ -20,7 +20,8 @@ import products.urls as products_urls
 import transactions.urls as transactions_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('products/', include((products_urls.router.urls, 'products'))),
-    path('transactions/', include((transactions_urls.router.urls, 'transactions'))),
+    path("admin/", admin.site.urls),
+    path("settings/", include("dbsettings.urls")),
+    path("products/", include((products_urls.router.urls, "products"))),
+    path("transactions/", include((transactions_urls.router.urls, "transactions"))),
 ]
