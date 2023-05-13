@@ -98,7 +98,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         """
         list_of_transactions = []
 
-        for transaction in self.get_queryset():
+        for transaction in self.get_queryset().order_by("-date"):
             for sub_transaction in SubTransaction.objects.filter(
                 transaction=transaction
             ):
