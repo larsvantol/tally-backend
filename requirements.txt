@@ -17,3 +17,4 @@ sqlparse==0.4.3
 tzdata==2022.7
 virtualenv==20.21.0
 zipp==3.15.0
+django-dbsettings==1.3
