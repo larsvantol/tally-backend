@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.urls import reverse
 from django.utils.html import format_html
 from django.http import HttpResponse
@@ -43,7 +43,7 @@ class SubPurchaseInline(admin.TabularInline):
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "relation_code")
+    list_display = ("full_name", "relation_code", "has_uuid", "has_code")
     search_fields = ("first_name", "prefix", "last_name", "relation_code")
     fieldsets = (
         ("Name", {"fields": ("first_name", "prefix", "last_name")}),
@@ -71,12 +71,31 @@ class CustomerAdmin(admin.ModelAdmin):
         )
         return form
 
-    # Hash UUID and code before saving
+    # Hash UUID and code before saving if it has changed
     def save_model(self, request, obj, form, change):
-        if not (form.cleaned_data.get("encrypted_uuid") == None):
-            obj.encrypted_uuid = obj.hash_uuid(form.cleaned_data.get("encrypted_uuid"))
-        if not (form.cleaned_data.get("encrypted_code") == None):
-            obj.encrypted_code = obj.hash_code(form.cleaned_data.get("encrypted_code"))
+        for field_name in ["encrypted_uuid", "encrypted_code"]:
+            if field_name in form.changed_data:
+                if (
+                    form.cleaned_data.get(field_name) == ""
+                    or form.cleaned_data.get(field_name) == None
+                ):
+                    setattr(obj, field_name, None)
+                    messages.add_message(
+                        request,
+                        messages.WARNING,
+                        f'The {field_name} of "{obj.relation_code} - {obj.full_name()}" has been deleted',
+                    )
+                else:
+                    setattr(
+                        obj,
+                        field_name,
+                        obj.hash_uuid(form.cleaned_data.get(field_name)),
+                    )
+                    messages.add_message(
+                        request,
+                        messages.INFO,
+                        f'The {field_name} of "{obj.relation_code} - {obj.full_name()}" has been encrypted and saved',
+                    )
         super().save_model(request, obj, form, change)
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib import admin
 from django.contrib.auth.hashers import make_password, check_password
 from products.models import Product
 import uuid
@@ -36,11 +37,13 @@ class Customer(models.Model):
     def check_code(self, code):
         return check_password(code, self.encrypted_code)
 
+    @admin.display(boolean=True)
     def has_uuid(self):
-        return self.encrypted_uuid != ""
+        return not (self.encrypted_uuid == "" or self.encrypted_uuid == None)
 
+    @admin.display(boolean=True)
     def has_code(self):
-        return self.encrypted_code != ""
+        return not (self.encrypted_code == "" or self.encrypted_code == None)
 
     def hash_uuid(self, uuid):
         return make_password(uuid)
