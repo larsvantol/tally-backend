@@ -86,6 +86,16 @@ class CustomerAdmin(admin.ModelAdmin):
                         f'The {field_name} of "{obj.relation_code} - {obj.full_name()}" has been deleted',
                     )
                 else:
+                    verified = getattr(obj, f"verify_{field_name}_requirements")(
+                        form.cleaned_data.get(field_name)
+                    )
+                    if not verified:
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            f'The {field_name} of "{obj.relation_code} - {obj.full_name()}" does not meet the requirements. Please try again.',
+                        )
+                        return
                     setattr(
                         obj,
                         field_name,

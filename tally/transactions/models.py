@@ -16,7 +16,12 @@ class Customer(models.Model):
     )
 
     encrypted_uuid = models.CharField(max_length=100, blank=True, null=True)
-    encrypted_code = models.CharField(max_length=100, blank=True, null=True)
+    encrypted_code = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="""Code to login, must be 4 digits.""",
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -36,6 +41,16 @@ class Customer(models.Model):
 
     def check_code(self, code):
         return check_password(code, self.encrypted_code)
+
+    def verify_encrypted_code_requirements(self, code):
+        return len(code) == 4 and code.isnumeric()
+
+    def verify_encrypted_uuid_requirements(self, uuid_to_test, version=None):
+        try:
+            uuid_obj = uuid.UUID(uuid_to_test, version=version)
+        except ValueError:
+            return False
+        return str(uuid_obj) == uuid_to_test
 
     @admin.display(boolean=True)
     def has_uuid(self):
