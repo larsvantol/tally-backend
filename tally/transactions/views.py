@@ -122,13 +122,6 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         return Response(list_of_transactions)
 
-    #     [
-    #   {name: 'Doritos', quantity: 1, amount: 0.50, date: new Date()},
-    #   {name: 'Croky Paprika Chips', quantity: 1, amount: 0.50, date: new Date("2023-03-23")},
-    #   {name: 'Doritos', quantity: 1, amount: 0.50, date: new Date("2023-03-20")},
-    #   {name: 'Kitkat', quantity: 1, amount: 0.50, date: new Date("2023-03-10")}
-    # ];
-
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
