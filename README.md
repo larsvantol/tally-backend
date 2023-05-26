@@ -85,8 +85,8 @@ You can now log in into the admin panel.
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`OIDC_RP_CLIENT_ID`
-`OIDC_RP_CLIENT_SECRET`
+`OIDC_RP_CLIENT_ID`<br>
+`OIDC_RP_CLIENT_SECRET`<br>
 `OIDC_TALLY_ADMIN_GROUP`
 
 ## API Reference
