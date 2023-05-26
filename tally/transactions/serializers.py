@@ -1,13 +1,37 @@
+from django.contrib.auth.models import User
+from django.utils.timezone import now
+
 from rest_framework import serializers
 from .models import Customer, Transaction, SubTransaction, SubPurchase
-from products.serializers import ProductSerializer
+
+
+class UserSerializer(serializers.ModelSerializer):
+    days_since_joined = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "last_login",
+            "first_name",
+            "last_name",
+            "email",
+            "is_staff",
+            "is_superuser",
+            "days_since_joined",
+        ]
+
+    def get_days_since_joined(self, obj):
+        return (now() - obj.date_joined).days
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Customer
-        fields = ["id", "first_name", "prefix", "last_name", "relation_code"]
-        extra_kwargs = {"relation_code": {"write_only": True}}
+        fields = ["id", "relation_code", "sub", "user"]
 
 
 class SubTransactionSerializer(serializers.ModelSerializer):

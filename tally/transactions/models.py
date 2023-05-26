@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
+from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from products.models import Product
 import uuid
@@ -8,11 +9,13 @@ import uuid
 
 # Create your models here.
 class Customer(models.Model):
-    first_name = models.CharField(max_length=100)
-    prefix = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100)
     relation_code = models.IntegerField(
         help_text="""Relation code of the customer.""", unique=True
+    )
+
+    sub = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="customer"
     )
 
     encrypted_uuid = models.CharField(max_length=100, blank=True, null=True)
@@ -27,14 +30,7 @@ class Customer(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return (
-            str(self.relation_code)
-            + " - "
-            + self.first_name
-            + " "
-            + (self.prefix + " " if self.prefix else "")
-            + self.last_name
-        )
+        return str(self.relation_code) + " - " + self.full_name()
 
     def check_uuid(self, uuid):
         return check_password(uuid, self.encrypted_uuid)
@@ -60,6 +56,10 @@ class Customer(models.Model):
     def has_code(self):
         return not (self.encrypted_code == "" or self.encrypted_code == None)
 
+    @admin.display(boolean=True)
+    def has_user(self):
+        return not (self.user == None)
+
     def hash_uuid(self, uuid):
         return make_password(uuid)
 
@@ -67,19 +67,16 @@ class Customer(models.Model):
         return make_password(code)
 
     def full_name(self):
-        return (
-            self.first_name
-            + " "
-            + (self.prefix + " " if self.prefix else "")
-            + self.last_name
-        )
+        if self.user == None:
+            return "unknown"
+        return self.user.first_name + " " + self.user.last_name
 
 
 class Transaction(models.Model):
     transaction_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False
     )
-    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     date = models.DateTimeField(
         default=timezone.now(), help_text="""Date of the transaction."""
     )
@@ -189,9 +186,6 @@ class SubPurchase(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     def amount(self):
-        print(
-            f"price: {self.price}, quantity: {self.quantity} = {self.price * self.quantity}"
-        )
         return self.price * self.quantity
 
     def summary(self) -> tuple:

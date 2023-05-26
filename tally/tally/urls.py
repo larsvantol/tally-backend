@@ -19,9 +19,15 @@ from django.urls import include, path
 import products.urls as products_urls
 import transactions.urls as transactions_urls
 
+from .views import is_authenticatedView, loginView, logoutView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("settings/", include("dbsettings.urls")),
     path("products/", include((products_urls.router.urls, "products"))),
     path("transactions/", include((transactions_urls.router.urls, "transactions"))),
+    path("oidc/", include("mozilla_django_oidc.urls")),
+    path("auth/is_authenticated/", is_authenticatedView, name="is_authenticated"),
+    path("auth/login/", loginView, name="login"),
+    path("auth/logout/", logoutView, name="logout"),
 ]

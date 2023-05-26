@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib import admin, messages
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.html import format_html
 from django.http import HttpResponse
@@ -43,11 +45,21 @@ class SubPurchaseInline(admin.TabularInline):
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "relation_code", "has_uuid", "has_code")
-    search_fields = ("first_name", "prefix", "last_name", "relation_code")
+    list_display = (
+        "user",
+        "relation_code",
+        "sub",
+        "has_user",
+        "has_uuid",
+        "has_code",
+    )
+    search_fields = ("relation_code",)
     fieldsets = (
-        ("Name", {"fields": ("first_name", "prefix", "last_name")}),
-        ("Authentication", {"fields": ("encrypted_uuid", "encrypted_code")}),
+        # ("Name", {"fields": ("first_name", "prefix", "last_name")}),
+        (
+            "Authentication",
+            {"fields": ("user", "sub", "encrypted_uuid", "encrypted_code")},
+        ),
         ("Meta", {"fields": ("created", "last_modified")}),
         (
             "Exact",
@@ -147,9 +159,7 @@ class TransactionAdmin(admin.ModelAdmin):
     ordering = ("-date",)
     search_fields = (
         "transaction_id",
-        "customer__first_name",
-        "customer__prefix",
-        "customer__last_name",
+        "customer__full_name",
     )
     list_filter = (TransactionDateListFilter,)
     inlines = [SubTransactionInline, SubPurchaseInline]
@@ -176,3 +186,35 @@ class TransactionAdmin(admin.ModelAdmin):
 
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+
+
+class CustomerInline(admin.StackedInline):
+    model = Customer
+    can_delete = False
+    verbose_name_plural = "customers"
+
+    fieldsets = (
+        (
+            "Authentication",
+            {"fields": ("user", "sub", "encrypted_uuid", "encrypted_code")},
+        ),
+        (
+            "Exact",
+            {
+                "classes": ("collapse",),
+                "fields": ("relation_code",),
+            },
+        ),
+        ("Meta", {"fields": ("created", "last_modified")}),
+    )
+    readonly_fields = ("created", "last_modified")
+
+
+# Define a new User admin
+class UserAdmin(BaseUserAdmin):
+    inlines = [CustomerInline]
+
+
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
