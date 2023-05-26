@@ -120,6 +120,8 @@ AUTHENTICATION_BACKENDS = (
 OIDC_RP_CLIENT_ID = os.environ["OIDC_RP_CLIENT_ID"]
 OIDC_RP_CLIENT_SECRET = os.environ["OIDC_RP_CLIENT_SECRET"]
 
+# TODO: Use values of https://connect.ch.tudelft.nl/.well-known/openid-configuration
+
 OIDC_OP_AUTHORIZATION_ENDPOINT = "https://connect.ch.tudelft.nl/authorize"
 OIDC_OP_TOKEN_ENDPOINT = "https://connect.ch.tudelft.nl/token"
 OIDC_OP_USER_ENDPOINT = "https://connect.ch.tudelft.nl/userinfo"
