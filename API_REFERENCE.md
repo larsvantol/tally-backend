@@ -26,11 +26,10 @@
     - [Parameters](#parameters-5)
     - [Response](#response-5)
 - [Customers](#customers)
+
   - [Get the current customer](#get-the-current-customer)
     - [Parameters](#parameters-6)
     - [Response](#response-6)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
   <!-- TOC end -->
 
