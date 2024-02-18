@@ -11,6 +11,9 @@
 
 {% block content %}
 <h1>Add products</h1>
+<h2>Invoice number: {{ invoice_data.invoice_date }}</h2>
+<h2>Invoice date: {{ invoice_data.invoice_number }}</h2>
+<br />
 <form id="form-container" method="POST" action=".">
     {% csrf_token %}
     {{ product_formset.management_form }}
@@ -38,7 +41,7 @@
                     {{ field }}
                 </td>
             {% endfor %}
-            <td><button class="btn btn-danger remove-form-row">-</button></td>
+            <td><button style="color: red; cursor: pointer;" class="remove-form-row">🗑</button></td>
         </tr>
         {% endfor %}
     </table>
