@@ -3,6 +3,9 @@ from io import StringIO
 
 import numpy as np
 import pandas as pd
+
+# from pdfminer.high_level import extract_text
+from pdfminer.converter import TextConverter
 from pdfminer.converter import TextConverter
 from pdfminer.high_level import extract_text
 from pdfminer.layout import LAParams
@@ -114,6 +117,14 @@ def to_list(df):
     result = []
     for index, row in df.iterrows():
         try:
+            result.append({
+                "article_number": int(row['Artikelnummer']),
+                "name": row['Artikelomschrijving'], 
+                "price": float(row['Prijs st/kg'].replace(',','.')), 
+                "stock": int(float(row['Stuks per eenheid'].replace(',','.'))*int(row['Aantal'])),
+                "product_group": 1,
+                "vat_percentage": row['BTW']
+            })
             result.append(
                 {
                     "article_number": int(row["Artikelnummer"]),
@@ -136,6 +147,12 @@ def filter_list(list):
         try:
             product = Product.objects.get(article_number=item["article_number"])
             new_item = {
+                'article_number': product.article_number, 
+                'name': product.name, 
+                'price': product.price, 
+                'stock': item['stock'], 
+                'product_group': product.product_group,
+                'vat_percentage': product.vat_percentage
                 "article_number": product.article_number,
                 "name": product.name,
                 "price": product.price,

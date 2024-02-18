@@ -37,11 +37,26 @@ class Transaction(models.Model):
 
     def __str__(self):
         return str(self.transaction_id)
+
+    def export_to_list_exact_format(self):
+        # formatting:
+        # nieuwe boeking, omschrijving:kopregel, datum, betalingsconditie, relatiecode, grootboekrekening, omschrijving, aantal, btw code, bedrag
+        # TODO: make setting for betalingsconditie (DS)
+        result = [[1, f"tally transaction {self.transaction_id}", self.date.strftime('%d-%m-%Y'), "DS", self.customer.relation_code]]
+        for subtransaction in SubTransaction.objects.filter(transaction=self.transaction_id):
+            result.append(["", "", "", "", "", subtransaction.account_code, subtransaction.description, "", subtransaction.vat_percentage, subtransaction.amount])
+        for subpurchase in SubPurchase.objects.filter(transaction=self.transaction_id):
+            result.append(["", "", "", "", "", subpurchase.product.account_code, subpurchase.product.name, subpurchase.quantity, subpurchase.product.vat_percentage, subpurchase.amount()])
+        return result
+
     
 class SubTransaction(models.Model):
     description = models.CharField(max_length=100, help_text="""Description of the transaction.""")
     amount = models.DecimalField(max_digits=10, decimal_places=2, help_text="""Amount to be deducted.""")
+    account_code = models.IntegerField(default=3002, help_text="""account code (grootboekrekeningnummer) for income""")   # TODO: make default account code a setting
+    vat_percentage = models.IntegerField(help_text="""BTW percentage of the transaction.""", default=0) # TODO: make default vat percentage a setting
     transaction = models.ForeignKey('Transaction', related_name='subtransactions', on_delete=models.CASCADE)
+
 
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)

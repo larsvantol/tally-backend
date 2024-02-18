@@ -23,13 +23,13 @@ If the backend is finished, these are the features that the server has.
 Clone the project
 
 ```bash
-git clone https://github.com/larsvantol/turf.git
+git clone https://github.com/larsvantol/tally-backend.git
 ```
 
 Go to the root of the project directory and setup a virtual environment.
 
 ```bash
-python venv venv
+python -m venv venv
 ```
 
 Activate the virtual environment.
@@ -47,7 +47,7 @@ pip install -r requirements.txt
 Run the migrations.
 
 ```bash
-python manage.py runserver
+python manage.py migrate
 ```
 
 Start the server

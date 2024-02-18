@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'dbsettings',
     'products',
     'transactions',
 ]
@@ -114,6 +115,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# DBSETTINGS_USE_SITES = False
 
 
 # Static files (CSS, JavaScript, Images)

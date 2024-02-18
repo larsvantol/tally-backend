@@ -63,6 +63,9 @@ class ProductAdmin(admin.ModelAdmin):
     )
     list_filter = ("product_group", StockFilter)
     search_fields = ("name", "article_number")
+    list_display = ('article_number','name', 'product_group_formatted', 'price_formatted', 'vat_percentage_formatted', 'stock', 'account_code','image')
+    list_filter = ('product_group', StockFilter)
+    search_fields = ('name', 'article_number')
     fieldsets = (
         ("Name", {"fields": ("article_number", "name", "product_group")}),
         ("Details", {"fields": ("price", "stock", "image_url")}),
@@ -115,6 +118,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     def add_bulk(self, request):
         ProductFormSet = forms.modelformset_factory(
+            Product, fields=("article_number", "name", "price", "stock", "image_url", "product_group", "vat_percentage")
             Product,
             fields=("article_number", "name", "price", "stock", "image_url", "product_group"),
         )
@@ -217,6 +221,12 @@ class MakroInvoiceAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+
+    def vat_percentage_formatted(self, obj):
+        """
+        Formats the vat percentage of the product as xx%
+        """
+        return f'{obj.vat_percentage}%'
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductGroup, ProductGroupAdmin)
