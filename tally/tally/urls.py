@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls.static import static
 
 import products.urls as products_urls
 import transactions.urls as transactions_urls
+import tally.settings as settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("settings/", include("dbsettings.urls")),
     path("products/", include((products_urls.router.urls, "products"))),
     path("transactions/", include((transactions_urls.router.urls, "transactions"))),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,5 @@
+*.md
+.venv
+.vscode
+.github
+.devcontainer
