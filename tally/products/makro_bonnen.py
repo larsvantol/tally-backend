@@ -15,6 +15,12 @@ from pdfminer.pdfparser import PDFParser
 
 from .models import Product
 
+MAKRO_BTW_CODES = {
+    1: 21,
+    5: 9,
+    0: 0,
+}
+
 
 def read_makro_invoice(pdf_file):
     output_string = StringIO()
@@ -92,7 +98,7 @@ def read_makro_invoice(pdf_file):
                     article["Prijs per collo"] = split_line[i - 1]
                     article["Aantal"] = split_line[i - 2]
                     article["Bedrag"] = split_line[i - 3]
-                    article["BTW"] = split_line[i - 4]
+                    article["BTW"] = MAKRO_BTW_CODES[int(split_line[i - 4])]
                     article["Artikelomschrijving"] = " ".join(split_line[: i + 2 : -1])
 
                     split_line = split_line[: i - 4]
@@ -126,17 +132,6 @@ def to_list(df):
                     ),
                     "product_group": 1,
                     "vat_percentage": row["BTW"],
-                }
-            )
-            result.append(
-                {
-                    "article_number": int(row["Artikelnummer"]),
-                    "name": row["Artikelomschrijving"],
-                    "price": float(row["Prijs st/kg"].replace(",", ".")),
-                    "stock": int(
-                        float(row["Stuks per eenheid"].replace(",", ".")) * int(row["Aantal"])
-                    ),
-                    "product_group": 1,
                 }
             )
         except:

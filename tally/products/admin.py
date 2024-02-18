@@ -170,7 +170,7 @@ class ProductAdmin(admin.ModelAdmin):
                         continue
                 return redirect("/admin/products/product")
             else:
-                print(prod_forms)
+                print(prod_forms.errors)
 
         admin_site: AdminSite = site
         context = admin_site.each_context(request)
@@ -202,6 +202,13 @@ class ProductAdmin(admin.ModelAdmin):
         return format_html(
             f'<a href="?product_group__id__exact={obj.product_group.id}">{obj.product_group.name}</a>'
         )
+
+    @admin.display(description="VAT")
+    def vat_percentage_formatted(self, obj):
+        """
+        Formats the vat percentage of the product as xx%
+        """
+        return f"{obj.vat_percentage}%"
 
 
 class MakroInvoiceItemInline(admin.TabularInline):
@@ -235,13 +242,7 @@ class MakroInvoiceAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
-        return False
-
-    def vat_percentage_formatted(self, obj):
-        """
-        Formats the vat percentage of the product as xx%
-        """
-        return f"{obj.vat_percentage}%"
+        return True
 
 
 admin.site.register(Product, ProductAdmin)

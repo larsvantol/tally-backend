@@ -67,6 +67,5 @@ class MakroInvoiceItem(models.Model):
 
 @receiver(pre_delete, sender=MakroInvoiceItem)
 def delete_makrobonitem_hook(sender, instance, using, **kwargs):
-    print(f"Deleting {instance.quantity} of {instance.product.name}")
     instance.product.stock -= instance.quantity
     instance.product.save()
