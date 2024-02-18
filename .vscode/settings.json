@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\jules\\AppData\\Local\\conda\\conda\\envs\\tally_backend\\python.exe"
+  "python.analysis.typeCheckingMode": "off",
+  "pylint.args": ["--disable=E1101"],
+  "python.pythonPath": "C:\\Users\\jules\\AppData\\Local\\conda\\conda\\envs\\tally_backend\\python.exe"
 }
