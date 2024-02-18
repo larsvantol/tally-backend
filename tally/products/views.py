@@ -1,12 +1,11 @@
 from django.shortcuts import render
-
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
-from rest_framework.decorators import action
 
 from .models import Product, ProductGroup
-from .serializers import ProductSerializer, ProductGroupSerializer
+from .serializers import ProductGroupSerializer, ProductSerializer
 
 GET_LIST = "list"
 GET_RETRIEVE = "retrieve"
@@ -16,21 +15,22 @@ DELETE_DESTROY = "destroy"
 PUT_UPDATE = "update"
 PATCH_PARTIAL_UPDATE = "partial_update"
 
+
 class ProductGroupViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing product groups.
     """
-    
+
     queryset = ProductGroup.objects.all()
-    serializer_class = ProductGroupSerializer 
+    serializer_class = ProductGroupSerializer
 
     # API endpoint that allows products to be listed per group
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def products(self, request, pk=None):
         """
         Lists products sorted by product group
         """
-        queryset = Product.objects.filter(product_group__id=pk).order_by('name')
+        queryset = Product.objects.filter(product_group__id=pk).order_by("name")
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -38,7 +38,7 @@ class ProductGroupViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        
+
         if self.action == GET_LIST:
             permission_classes = [AllowAny]
         elif self.action == GET_RETRIEVE:
@@ -52,10 +52,10 @@ class ProductGroupViewSet(viewsets.ModelViewSet):
         elif self.action == DELETE_DESTROY:
             permission_classes = [AllowAny]
         else:
-            print(self.action)
             permission_classes = [IsAdminUser]
 
         return [permission() for permission in permission_classes]
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -69,10 +69,10 @@ class ProductViewSet(viewsets.ModelViewSet):
         """
         Lists products sorted by product group
         """
-        queryset = self.get_queryset().order_by('product_group__name')
+        queryset = self.get_queryset().order_by("product_group__name")
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
-    
+
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.

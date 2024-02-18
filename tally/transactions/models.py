@@ -133,7 +133,6 @@ class SubPurchase(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     def amount(self):
-        print(f"price: {self.price}, quantity: {self.quantity} = {self.price * self.quantity}")
         return self.price * self.quantity
 
     def summary(self) -> tuple:
