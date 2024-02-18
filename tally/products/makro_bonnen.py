@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from pdfminer.high_level import extract_text
+# from pdfminer.high_level import extract_text
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfdocument import PDFDocument

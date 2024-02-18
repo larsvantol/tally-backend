@@ -1,4 +1,5 @@
 from django.db import models
+import dbsettings
 
 # Create your models here.
 class ProductGroup(models.Model):
@@ -25,3 +26,8 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+    
+class ProductSettings(dbsettings.Group):
+    default_VAT_value = dbsettings.PositiveIntegerValue()
+
+product_settings = ProductSettings("Product Settings")
