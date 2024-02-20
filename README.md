@@ -20,6 +20,8 @@ If the backend is finished, these are the features that the server has.
 
 ## Run Locally
 
+There is also a docker devcontainer for this project. See [devcontainer](#devcontainer).
+
 Clone the project
 
 ```bash
@@ -77,6 +79,16 @@ Superuser created successfully.
 ```
 
 You can now log in into the admin panel.
+
+## Devcontainer
+
+This repository has a devcontainer that has been tested in VS Code. The devcontainer will automatically install all dependencies, start a postgres container and an adminer container. On the first build of the container it will also run the migrations.
+
+To be able to run the devcontainer you need to have VS Code installed with the [dev containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). 
+
+First clone the repository and open it with VS Code. Now run the following command in the VS Code command palette: `Dev Containers: Reopen in Container`. (You can open the command palette with `Ctrl+Shift+P`).
+
+Once everything has started succesfully you should be able to access adminer on `localhost:8080`. To be able to run and acces tally itself, you might still need to [create an admin user](#creating-an-admin-user) (first do `cd tally`). Then you can run tally by pressing `Start Debugging (F5)` or by running the command `python manage.py runserver`. You should now be able to access tally on `localhost:8000`. If you want to run the migrations, use the command `python manage.py migrate`.
 
 ## Environment Variables (Dummy text)
 <i>Dummy text</i>
