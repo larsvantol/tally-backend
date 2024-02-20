@@ -57,9 +57,7 @@ RUN chmod +x  $APP_HOME/docker-entrypoint.sh
 COPY ./tally/ $APP_HOME
 COPY ./prod.env ./prod.env
 
-RUN set -a && \
-    . ./prod.env && \
-    python manage.py collectstatic --noinput --no-post-process
+RUN python manage.py collectstatic --noinput --no-post-process
 
 
 # chown all the files to the app user
