@@ -1,25 +1,32 @@
 from rest_framework import serializers
-from .models import Customer, Transaction, SubTransaction, SubPurchase
-from products.serializers import ProductSerializer
+
+from .models import Customer, SubPurchase, SubTransaction, Transaction
+
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'first_name', 'prefix', 'last_name', 'relation_code']
-        extra_kwargs = {
-            'relation_code': {'write_only': True}
-        }
+        fields = ["id", "first_name", "prefix", "last_name", "relation_code"]
+        extra_kwargs = {"relation_code": {"write_only": True}}
+
 
 class SubTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubTransaction
-        fields = ['description', 'amount']	
+        fields = ["description", "amount"]
+
 
 class SubPurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubPurchase
-        fields = ['product', 'quantity', 'price', 'amount']	
-        extra_kwargs = {'price': {'read_only': True}}
+        fields = ["product", "quantity", "price", "amount"]
+        extra_kwargs = {"price": {"read_only": True}}
+
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Quantity must be strictly positive")
+        return value
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     subtransactions = SubTransactionSerializer(many=True, read_only=False, required=False)
@@ -27,14 +34,16 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ['transaction_id', 'customer', 'date', 'subtransactions', 'subpurchases']
+        fields = ["transaction_id", "customer", "date", "subtransactions", "subpurchases"]
 
     def create(self, validated_data):
-        if not validated_data.get('subtransactions') and not validated_data.get('subpurchases'):
-            raise serializers.ValidationError('Transaction must have at least one subtransaction or subpurchase')
+        if not validated_data.get("subtransactions") and not validated_data.get("subpurchases"):
+            raise serializers.ValidationError(
+                "Transaction must have at least one subtransaction or subpurchase"
+            )
 
-        subtransactions_data = validated_data.pop('subtransactions', [])
-        subpurchases_data = validated_data.pop('subpurchases', [])
+        subtransactions_data = validated_data.pop("subtransactions", [])
+        subpurchases_data = validated_data.pop("subpurchases", [])
 
         transaction = Transaction.objects.create(**validated_data)
 
@@ -43,5 +52,5 @@ class TransactionSerializer(serializers.ModelSerializer):
 
         for subpurchase_data in subpurchases_data:
             SubPurchase.objects.create(transaction=transaction, **subpurchase_data)
-        
+
         return transaction
