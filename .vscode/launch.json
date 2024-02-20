@@ -8,7 +8,7 @@
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}\\tally\\manage.py",
+            "program": "${workspaceFolder}/tally/manage.py",
             "args": [
                 "runserver"
             ],
