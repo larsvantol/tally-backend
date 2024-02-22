@@ -22,8 +22,8 @@ from django.urls import include, path
 from .views import is_authenticatedView, login_failureView, loginView, logoutView
 
 urlpatterns = [
+    path("admin/settings/", include("dbsettings.urls")),
     path("admin/", admin.site.urls),
-    path("settings/", include("dbsettings.urls")),
     path("products/", include((products_urls.router.urls, "products"))),
     path("transactions/", include((transactions_urls.router.urls, "transactions"))),
     path("oidc/", include("mozilla_django_oidc.urls")),
