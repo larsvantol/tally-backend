@@ -1,12 +1,11 @@
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import redirect
-import json
 
 
 def json_response(something):
-    return HttpResponse(
-        json.dumps(something), content_type="application/javascript; charset=utf8"
-    )
+    return HttpResponse(json.dumps(something), content_type="application/javascript; charset=utf8")
 
 
 def is_authenticatedView(request):
@@ -28,3 +27,12 @@ def logoutView(request):
         return redirect("oidc_logout")
     else:
         return is_authenticatedView(request)
+
+
+def login_failureView(request):
+    """View to handle login failure. It shows the user the reason why the login failed."""
+    if "authentication_errors" in request.session:
+        return json_response({"authenticated": request.session["authentication_errors"]})
+    return json_response(
+        {"authenticated": "Login failed due to unknown reasons. Please try again."}
+    )

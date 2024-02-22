@@ -13,6 +13,7 @@ class Customer(models.Model):
     relation_code = models.IntegerField(help_text="""Relation code of the customer.""", unique=True)
 
     sub = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    netid = models.CharField(max_length=100, unique=True, blank=True, null=True)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, blank=True, null=True, related_name="customer"
     )

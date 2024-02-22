@@ -1,13 +1,15 @@
+import csv
+from datetime import datetime
+
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import format_html
-from django.http import HttpResponse
-from datetime import datetime
-from .models import Customer, Transaction, SubTransaction, SubPurchase
-import csv
+
+from .models import Customer, SubPurchase, SubTransaction, Transaction
 
 
 # Filter transactions based on dates, day, month, year
@@ -49,16 +51,17 @@ class CustomerAdmin(admin.ModelAdmin):
         "user",
         "relation_code",
         "sub",
+        "netid",
         "has_user",
         "has_uuid",
         "has_code",
     )
-    search_fields = ("relation_code",)
+    search_fields = ("relation_code", "netid", "sub")
     fieldsets = (
         # ("Name", {"fields": ("first_name", "prefix", "last_name")}),
         (
             "Authentication",
-            {"fields": ("user", "sub", "encrypted_uuid", "encrypted_code")},
+            {"fields": ("user", "sub", "netid", "encrypted_uuid", "encrypted_code")},
         ),
         ("Meta", {"fields": ("created", "last_modified")}),
         (
@@ -89,7 +92,7 @@ class CustomerAdmin(admin.ModelAdmin):
             if field_name in form.changed_data:
                 if (
                     form.cleaned_data.get(field_name) == ""
-                    or form.cleaned_data.get(field_name) == None
+                    or form.cleaned_data.get(field_name) is None
                 ):
                     setattr(obj, field_name, None)
                     messages.add_message(

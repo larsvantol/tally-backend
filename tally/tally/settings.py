@@ -132,9 +132,10 @@ OIDC_RP_SIGN_ALGO = "RS256"
 OIDC_OP_JWKS_ENDPOINT = "https://connect.ch.tudelft.nl/jwk"
 
 LOGIN_REDIRECT_URL = "http://localhost:4200/products"
+LOGIN_REDIRECT_URL_FAILURE = "http://localhost:8000/auth/login_failure/"
 LOGOUT_REDIRECT_URL = "http://localhost:8000/auth/is_authenticated/"
 
-OIDC_RP_SCOPES = "openid profile email ldap auth"
+OIDC_RP_SCOPES = "openid profile email ldap student"
 ALLOW_LOGOUT_GET_METHOD = True
 
 # OIDC_CREATE_USER = False
@@ -176,3 +177,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = ("http://localhost:4200",)
+CSRF_TRUSTED_ORIGINS = ("http://localhost:4200",)
