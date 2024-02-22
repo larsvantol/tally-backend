@@ -26,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
         return (now() - obj.date_joined).days
 
 
+
 class CustomerSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 

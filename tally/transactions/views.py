@@ -59,9 +59,7 @@ class TransactionsView(ListCreateAPIView):
                         "date": transaction.date,
                     }
                 )
-
         return Response(list_of_transactions)
-
 
 class CustomerView(RetrieveAPIView):
     serializer_class = CustomerSerializer
