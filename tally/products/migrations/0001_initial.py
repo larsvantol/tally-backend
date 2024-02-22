@@ -13,6 +13,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='MakroInvoice',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('invoice_number', models.CharField(max_length=100)),
+                ('invoice_date', models.DateField()),
+                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'verbose_name_plural': 'Makro Invoices',
+                'ordering': ['-invoice_date'],
+            },
+        ),
+        migrations.CreateModel(
             name='ProductGroup',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -25,6 +38,7 @@ class Migration(migrations.Migration):
             name='Product',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('article_number', models.IntegerField()),
                 ('name', models.CharField(max_length=100)),
                 ('price', models.FloatField()),
                 ('stock', models.IntegerField()),
@@ -34,6 +48,15 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('last_modified', models.DateTimeField(auto_now=True)),
                 ('product_group', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='products', to='products.productgroup')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='MakroInvoiceItem',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('quantity', models.IntegerField()),
+                ('makro_bon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.makroinvoice')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.product')),
             ],
         ),
     ]

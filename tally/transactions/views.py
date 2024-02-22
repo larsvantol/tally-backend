@@ -1,12 +1,12 @@
 from django.shortcuts import render
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView, ListCreateAPIView
+from rest_framework.decorators import action
 
 from .models import Transaction, SubTransaction, SubPurchase
 from .serializers import CustomerSerializer, TransactionSerializer
-
 
 class TransactionsView(ListCreateAPIView):
     serializer_class = TransactionSerializer

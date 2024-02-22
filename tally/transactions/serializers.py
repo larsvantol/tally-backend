@@ -31,7 +31,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ["id", "relation_code", "sub", "user"]
+        fields = ["id", "first_name", "prefix", "last_name", "relation_code"]
+        extra_kwargs = {"relation_code": {"write_only": True}}
 
 
 class SubTransactionSerializer(serializers.ModelSerializer):
@@ -46,6 +47,10 @@ class SubPurchaseSerializer(serializers.ModelSerializer):
         fields = ["product", "quantity", "price", "amount"]
         extra_kwargs = {"price": {"read_only": True}}
 
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Quantity must be strictly positive")
+        return value
 
 class TransactionSerializer(serializers.ModelSerializer):
     subtransactions = SubTransactionSerializer(

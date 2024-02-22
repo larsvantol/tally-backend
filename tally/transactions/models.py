@@ -1,10 +1,12 @@
+import uuid
+
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from products.models import Product
-import uuid
+
 
 
 # Create your models here.
@@ -192,9 +194,13 @@ class SubPurchase(models.Model):
         return (f"{self.quantity}x {self.product.name}", self.amount())
 
     def save(self, *args, **kwargs):
+        # If no price is given, use the price of the product
         if not self.price:
             self.price = self.product.price
+        # Change the stock of the product
+        self.product.stock -= self.quantity
+        self.product.save()
         super(SubPurchase, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.product.name
+        return f"{self.quantity}x {self.product.name} for {self.transaction}"
