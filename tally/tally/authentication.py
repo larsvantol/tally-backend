@@ -97,6 +97,8 @@ class CustomerOIDCAB(OIDCAuthenticationBackend):
         user.save()
 
         customer.user = user
+        customer.netid = netid
+        customer.sub = sub
         customer.save()
 
         return user
