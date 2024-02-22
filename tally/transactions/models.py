@@ -1,19 +1,16 @@
 import uuid
 
+from django.contrib import admin
+from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
-from django.contrib import admin
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password, check_password
 from products.models import Product
-
 
 
 # Create your models here.
 class Customer(models.Model):
-    relation_code = models.IntegerField(
-        help_text="""Relation code of the customer.""", unique=True
-    )
+    relation_code = models.IntegerField(help_text="""Relation code of the customer.""", unique=True)
 
     sub = models.CharField(max_length=100, unique=True, blank=True, null=True)
     user = models.OneToOneField(
@@ -75,22 +72,16 @@ class Customer(models.Model):
 
 
 class Transaction(models.Model):
-    transaction_id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False
-    )
+    transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    date = models.DateTimeField(
-        default=timezone.now(), help_text="""Date of the transaction."""
-    )
+    date = models.DateTimeField(default=timezone.now(), help_text="""Date of the transaction.""")
 
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
     def total(self):
         total = 0
-        for subtransaction in SubTransaction.objects.filter(
-            transaction=self.transaction_id
-        ):
+        for subtransaction in SubTransaction.objects.filter(transaction=self.transaction_id):
             total += subtransaction.amount
         for subpurchase in SubPurchase.objects.filter(transaction=self.transaction_id):
             total += subpurchase.price * subpurchase.quantity
@@ -112,9 +103,7 @@ class Transaction(models.Model):
                 self.customer.relation_code,
             ]
         ]
-        for subtransaction in SubTransaction.objects.filter(
-            transaction=self.transaction_id
-        ):
+        for subtransaction in SubTransaction.objects.filter(transaction=self.transaction_id):
             result.append(
                 [
                     "",
@@ -148,9 +137,7 @@ class Transaction(models.Model):
 
 
 class SubTransaction(models.Model):
-    description = models.CharField(
-        max_length=100, help_text="""Description of the transaction."""
-    )
+    description = models.CharField(max_length=100, help_text="""Description of the transaction.""")
     amount = models.DecimalField(
         max_digits=10, decimal_places=2, help_text="""Amount to be deducted."""
     )
@@ -190,8 +177,15 @@ class SubPurchase(models.Model):
     def amount(self):
         return self.price * self.quantity
 
+    def product_name(self):
+        if self.product == None:
+            product_name = f"[unknown or deleted product]"
+        else:
+            product_name = self.product.name
+        return product_name
+
     def summary(self) -> tuple:
-        return (f"{self.quantity}x {self.product.name}", self.amount())
+        return (f"{self.quantity}x {self.product_name()}", self.amount())
 
     def save(self, *args, **kwargs):
         # If no price is given, use the price of the product
@@ -200,7 +194,7 @@ class SubPurchase(models.Model):
         # Change the stock of the product
         self.product.stock -= self.quantity
         self.product.save()
-        super(SubPurchase, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.quantity}x {self.product.name} for {self.transaction}"
+        return f"{self.quantity}x {self.product_name()} for {self.transaction}"

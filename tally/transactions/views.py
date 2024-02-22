@@ -1,16 +1,22 @@
-from django.shortcuts import render
-
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveAPIView, ListCreateAPIView
-from rest_framework.decorators import action
 
-from .models import Transaction, SubTransaction, SubPurchase
+from .models import SubPurchase, SubTransaction, Transaction
 from .serializers import CustomerSerializer, TransactionSerializer
 
+
 class TransactionsView(ListCreateAPIView):
+    """
+    View to list and create transactions
+    A customer can only see their own transactions and create new ones for themselves.
+    """
+
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user.customer)
 
     def get_queryset(self):
         customer = self.request.user.customer
@@ -39,9 +45,7 @@ class TransactionsView(ListCreateAPIView):
         list_of_transactions = []
 
         for transaction in transactions:
-            for sub_transaction in SubTransaction.objects.filter(
-                transaction=transaction
-            ):
+            for sub_transaction in SubTransaction.objects.filter(transaction=transaction):
                 list_of_transactions.append(
                     {
                         "name": sub_transaction.description,
@@ -61,7 +65,12 @@ class TransactionsView(ListCreateAPIView):
                 )
         return Response(list_of_transactions)
 
+
 class CustomerView(RetrieveAPIView):
+    """
+    A view to retrieve the information of the customer and the user associated with it.
+    """
+
     serializer_class = CustomerSerializer
     permission_classes = [IsAuthenticated]
 
