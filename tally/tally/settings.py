@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "mozilla_django_oidc",
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -129,7 +131,7 @@ OIDC_OP_USER_ENDPOINT = "https://connect.ch.tudelft.nl/userinfo"
 OIDC_RP_SIGN_ALGO = "RS256"
 OIDC_OP_JWKS_ENDPOINT = "https://connect.ch.tudelft.nl/jwk"
 
-LOGIN_REDIRECT_URL = "http://localhost:8000/auth/is_authenticated/"
+LOGIN_REDIRECT_URL = "http://localhost:4200/products"
 LOGOUT_REDIRECT_URL = "http://localhost:8000/auth/is_authenticated/"
 
 OIDC_RP_SCOPES = "openid profile email ldap auth"
@@ -137,6 +139,15 @@ ALLOW_LOGOUT_GET_METHOD = True
 
 # OIDC_CREATE_USER = False
 OIDC_TALLY_ADMIN_GROUP = os.environ["OIDC_TALLY_ADMIN_GROUP"]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "mozilla_django_oidc.contrib.drf.OIDCAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -159,3 +170,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = ("http://localhost:4200",)
