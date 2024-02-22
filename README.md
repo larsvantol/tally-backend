@@ -1,16 +1,19 @@
 # Tally
+
 Tally is the backend for tracking transactions for various products sold at the study association. In addition to products, other expenses that are not linked to a product can also be tracked here. An export can be made of the products sold in a certain time period.
 
 <!-- TOC start -->
+
 - [Features](#features)
 - [Run Locally](#run-locally)
-  * [Creating an admin user](#creating-an-admin-user)
+  - [Creating an admin user](#creating-an-admin-user)
 - [Environment Variables](#environment-variables)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 <!-- TOC end -->
 
 ## Features
+
 If the backend is finished, these are the features that the server has.
 
 - Products database and stock
@@ -79,12 +82,12 @@ Superuser created successfully.
 You can now log in into the admin panel.
 
 ## Environment Variables (Dummy text)
-<i>Dummy text</i>
+
 To run this project, you will need to add the following environment variables to your .env file
 
-`API_KEY`
-
-`ANOTHER_API_KEY`
+`OIDC_RP_CLIENT_ID`<br>
+`OIDC_RP_CLIENT_SECRET`<br>
+`OIDC_TALLY_ADMIN_GROUP`
 
 ## API Reference
 

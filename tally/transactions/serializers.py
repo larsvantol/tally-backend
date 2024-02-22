@@ -1,9 +1,35 @@
+from django.contrib.auth.models import User
+from django.utils.timezone import now
+
 from rest_framework import serializers
 from .models import Customer, Transaction, SubTransaction, SubPurchase
-from products.serializers import ProductSerializer
+
+
+class UserSerializer(serializers.ModelSerializer):
+    days_since_joined = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "last_login",
+            "first_name",
+            "last_name",
+            "email",
+            "is_staff",
+            "is_superuser",
+            "days_since_joined",
+        ]
+
+    def get_days_since_joined(self, obj):
+        return (now() - obj.date_joined).days
+
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Customer
         fields = ["id", "first_name", "prefix", "last_name", "relation_code"]
@@ -22,6 +48,10 @@ class SubPurchaseSerializer(serializers.ModelSerializer):
         fields = ["product", "quantity", "price", "amount"]
         extra_kwargs = {"price": {"read_only": True}}
 
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Quantity must be strictly positive")
+        return value
 
 class TransactionSerializer(serializers.ModelSerializer):
     subtransactions = SubTransactionSerializer(
