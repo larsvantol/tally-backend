@@ -33,6 +33,10 @@
 
   <!-- TOC end -->
 
+## Authentication
+
+Some endpoints are secured. To use this endpoints a user must be authenticated. To authenticate, the application using the endpoints must be whitelisted in the settings (see `CORS_ORIGIN_WHITELIST` and `CSRF_TRUSTED_ORIGINS`) and with each request the credentials (`sessionid` and `csrftoken`) must be sent.
+
 ## Products
 
 ### Get all products
@@ -49,9 +53,14 @@ GET /products/products
 
 #### Parameters
 
-| Parameter | Type     | Description  | Required     |
-| :-------- | :------- | :----------- | :----------- |
-| `api_key` | `string` | Your API key | **Required** |
+| Parameter | Type | Description | Required |
+| :-------- | :--- | :---------- | :------- |
+
+<i>None</i>
+
+#### Authentication
+
+<i>Authentication not required</i>
 
 #### Response
 
@@ -130,8 +139,11 @@ GET /products/products/${id}
 
 | Parameter | Type      | Description            | Required     |
 | :-------- | :-------- | :--------------------- | :----------- |
-| `api_key` | `string`  | Your API key           | **Required** |
 | `id`      | `integer` | Id of product to fetch | **Required** |
+
+#### Authentication
+
+<i>Authentication not required</i>
 
 #### Response
 
@@ -169,9 +181,14 @@ GET /products/product_groups
 
 #### Parameters
 
-| Parameter | Type     | Description  | Required     |
-| :-------- | :------- | :----------- | :----------- |
-| `api_key` | `string` | Your API key | **Required** |
+| Parameter | Type | Description | Required |
+| :-------- | :--- | :---------- | :------- |
+
+<i>None</i>
+
+#### Authentication
+
+<i>Authentication not required</i>
 
 #### Response
 
@@ -262,8 +279,11 @@ GET /products/product_groups/${id}
 
 | Parameter | Type     | Description                  | Required     |
 | :-------- | :------- | :--------------------------- | :----------- |
-| `api_key` | `string` | Your API key                 | **Required** |
 | `id`      | `string` | Id of product group to fetch | **Required** |
+
+#### Authentication
+
+<i>Authentication not required</i>
 
 #### Response
 
@@ -320,16 +340,21 @@ GET /transactions/transactions
 
 #### Parameters
 
-| Parameter | Type     | Description                                | Required     |
-| :-------- | :------- | :----------------------------------------- | :----------- |
-| `api_key` | `string` | Your API key                               | **Required** |
-| `flat`    | `bool`   | Lists all subtransactions in one list      | **Optional** |
-| `month`   | `int`    | Filter transactions for this month (1=Jan) | **Optional** |
-| `year`    | `int`    | Filter transactions for this year          | **Optional** |
+| Parameter | Type   | Description                                | Required     |
+| :-------- | :----- | :----------------------------------------- | :----------- |
+| `flat`    | `bool` | Lists all subtransactions in one list      | **Optional** |
+| `month`   | `int`  | Filter transactions for this month (1=Jan) | **Optional** |
+| `year`    | `int`  | Filter transactions for this year          | **Optional** |
+
+Exampe:
 
 ```http
-GET /transactions/transactions?flat=true&month=5&year=2023
+GET /transactions/transactions/?flat=true&month=5&year=2023
 ```
+
+#### Authentication
+
+Authentication is required. Only the transactions of the authenticated user are returned.
 
 #### Response
 
@@ -341,7 +366,7 @@ GET /transactions/transactions?flat=true&month=5&year=2023
     "date": "2023-04-21T09:33:57Z",
     "subtransactions": [
       {
-        "description": "Test April",
+        "description": "Cosmo kosten (5km)",
         "amount": "1.66"
       }
     ],
@@ -353,7 +378,7 @@ GET /transactions/transactions?flat=true&month=5&year=2023
     "date": "2023-05-13T17:51:58Z",
     "subtransactions": [
       {
-        "description": "Test",
+        "description": "AV eten 13/05",
         "amount": "12.78"
       }
     ],
@@ -372,7 +397,7 @@ GET /transactions/transactions?flat=true&month=5&year=2023
     "date": "2023-05-20T11:00:29Z",
     "subtransactions": [
       {
-        "description": "Test",
+        "description": "AV eten 20/05",
         "amount": "10.66"
       }
     ],
@@ -386,13 +411,13 @@ Example response for `flat = True`
 ```json
 [
   {
-    "name": "Test April",
+    "name": "Cosmo kosten (5km)",
     "quantity": 1,
     "amount": 1.66,
     "date": "2023-04-21T09:33:57Z"
   },
   {
-    "name": "Test",
+    "name": "AV eten 13/05",
     "quantity": 1,
     "amount": 12.78,
     "date": "2023-05-13T17:51:58Z"
@@ -404,7 +429,7 @@ Example response for `flat = True`
     "date": "2023-05-13T17:51:58Z"
   },
   {
-    "name": "Test",
+    "name": "AV eten 20/05",
     "quantity": 1,
     "amount": 10.66,
     "date": "2023-05-20T11:00:29Z"
@@ -419,7 +444,7 @@ Example response for `flat = True`
 Use this endpoint to create a transaction.
 
 ```http
-POST /transactions/transactions
+POST /transactions/transactions/
 ```
 
 <details>
@@ -428,12 +453,10 @@ POST /transactions/transactions
 
 #### Parameters
 
-| Parameter     | Type      | Description            | Required     |
-| :------------ | :-------- | :--------------------- | :----------- |
-| `api_key`     | `string`  | Your API key           | **Required** |
-| `customer_id` | `integer` | The id of the customer | **Required** |
+| Parameter | Type | Description | Required |
+| :-------- | :--- | :---------- | :------- |
 
-Furthermore one or more of the following is required: `SubTransaction` or `SubPurchase`. These can be provided in the post request as a list with the name `subtransactions` and/or `subpurchases`.
+One or more of the following is <b>required</b>: `SubTransaction` or `SubPurchase`. These can be provided in the post request as a list with the name `subtransactions` and/or `subpurchases`.
 
 A `SubTransaction` has the following form:
 
@@ -459,7 +482,6 @@ An example request can look like this:
 
 ```json
 {
-  "customer": 1,
   "subpurchases": [
     {
       "product": 4,
@@ -479,13 +501,17 @@ An example request can look like this:
 }
 ```
 
+#### Authentication
+
+Authentication is required. Only transactions for the authenticated user can be created.
+
 #### Response
 
 ```json
 {
   "transaction_id": "054b83c2-8380-4c49-8ebb-b317b337c8a0",
   "customer": 1,
-  "date_created": "2023-03-10T17:43:11.138850Z",
+  "date": "2024-02-22T19:59:23.559999Z",
   "subtransactions": [
     {
       "description": "Test",
@@ -509,7 +535,7 @@ An example request can look like this:
 
 ### Get the current customer
 
-Use this endpoint to get the logged in customer.
+Use this endpoint to get information about the logged in customer.
 
 ```http
 GET /transactions/customer
@@ -521,27 +547,33 @@ GET /transactions/customer
 
 #### Parameters
 
-| Parameter | Type     | Description  | Required     |
-| :-------- | :------- | :----------- | :----------- |
-| `api_key` | `string` | Your API key | **Required** |
+| Parameter | Type | Description | Required |
+| :-------- | :--- | :---------- | :------- |
+
+<i>None</i>
+
+#### Authentication
+
+Authentication is required. Only information about the current user is returned.
 
 #### Response
 
 ```json
 {
-  "id": 3,
+  "id": 4,
+  "netid": "dewijzeuil",
+  "sub": "WISVCH.660001",
   "relation_code": 6601,
-  "sub": "WISVCH.10443",
   "user": {
-    "id": 6,
-    "username": "WISVCH.10443",
-    "last_login": "2023-05-26T20:35:00.682717Z",
-    "first_name": "Lars",
-    "last_name": "van Tol",
-    "email": "lmjvantol@gmail.com",
+    "id": 5,
+    "username": "WISVCH.660001",
+    "last_login": "2024-02-22T19:19:00Z",
+    "first_name": "De",
+    "last_name": "Wijze Uil",
+    "email": "dewijzeuil@ch.tudelft.nl",
     "is_staff": true,
     "is_superuser": true,
-    "days_since_joined": 6
+    "days_since_joined": 0
   }
 }
 ```

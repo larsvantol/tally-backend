@@ -31,8 +31,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ["id", "user", "relation_code"]
-        extra_kwargs = {"relation_code": {"write_only": True}}
+        fields = ["id", "netid", "sub", "relation_code", "user"]
 
 
 class SubTransactionSerializer(serializers.ModelSerializer):
@@ -66,6 +65,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "subtransactions",
             "subpurchases",
         ]
+        read_only_fields = ["customer"]
 
     def create(self, validated_data):
         if not validated_data.get("subtransactions") and not validated_data.get("subpurchases"):
