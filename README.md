@@ -81,13 +81,21 @@ Superuser created successfully.
 
 You can now log in into the admin panel.
 
-## Environment Variables (Dummy text)
+## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to create a file called `.env` in the main directory add the following environment variables to your `.env` file
 
-`OIDC_RP_CLIENT_ID`<br>
-`OIDC_RP_CLIENT_SECRET`<br>
-`OIDC_TALLY_ADMIN_GROUP`
+#### `OIDC_RP_CLIENT_ID`
+
+Here you have to specify the client id of the provider you are trying to connect to.
+
+#### `OIDC_RP_CLIENT_SECRET`
+
+Here you have to specify the client secret of the provider you are trying to connect to.
+
+#### `OIDC_TALLY_ADMIN_GROUP`
+
+Here you have to specify which group is allowed in the administration backend of the application.
 
 ## API Reference
 
