@@ -97,6 +97,10 @@ Here you have to specify the client secret of the provider you are trying to con
 
 Here you have to specify which group is allowed in the administration backend of the application.
 
+#### `DJANGO_SECRET_KEY`
+
+The secret key used in django. See the [Django documentation](https://docs.djangoproject.com/en/5.0/ref/settings/#secret-key).
+
 ## API Reference
 
 See [API_REFERENCE.md](API_REFERENCE.md) for the documentation of the API.
