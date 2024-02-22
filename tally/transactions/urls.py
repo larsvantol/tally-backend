@@ -1,7 +1,12 @@
+from django.urls import path
 from rest_framework import routers
 
-from .views import CustomerViewSet, TransactionViewSet
+from .views import CustomerView, TransactionsView
 
 router = routers.SimpleRouter(trailing_slash=False)
-router.register(r'customers', CustomerViewSet, basename='customers')
-router.register(r'transactions', TransactionViewSet)
+
+urlpatterns = router.urls
+urlpatterns += [
+    path("transactions/", TransactionsView.as_view(), name="transactions"),
+    path("customer/", CustomerView.as_view(), name="customer"),
+]

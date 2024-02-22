@@ -1,28 +1,23 @@
+import json
+
+from django.contrib.sessions.models import Session
 from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.decorators import action
 
 from .models import Product, ProductGroup
 from .serializers import ProductGroupSerializer, ProductSerializer
 
-GET_LIST = "list"
-GET_RETRIEVE = "retrieve"
-GET_PRODUCTS_FROM_GROUP = "products"
-POST_CREATE = "create"
-DELETE_DESTROY = "destroy"
-PUT_UPDATE = "update"
-PATCH_PARTIAL_UPDATE = "partial_update"
 
-
-class ProductGroupViewSet(viewsets.ModelViewSet):
+class ProductGroupViewSet(ReadOnlyModelViewSet):
     """
-    A simple ViewSet for viewing and editing product groups.
+    A simple ViewSet for viewing product groups.
     """
-
     queryset = ProductGroup.objects.all()
     serializer_class = ProductGroupSerializer
+    permission_classes = [IsAuthenticated]
 
     # API endpoint that allows products to be listed per group
     @action(detail=True, methods=["get"])
@@ -34,63 +29,11 @@ class ProductGroupViewSet(viewsets.ModelViewSet):
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-
-        if self.action == GET_LIST:
-            permission_classes = [AllowAny]
-        elif self.action == GET_RETRIEVE:
-            permission_classes = [AllowAny]
-        elif self.action == GET_PRODUCTS_FROM_GROUP:
-            permission_classes = [AllowAny]
-        elif self.action == POST_CREATE:
-            permission_classes = [AllowAny]
-        elif self.action == PUT_UPDATE:
-            permission_classes = [AllowAny]
-        elif self.action == DELETE_DESTROY:
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-
-        return [permission() for permission in permission_classes]
-
-
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(ReadOnlyModelViewSet):
     """
-    A simple ViewSet for viewing and editing products.
+    A simple ViewSet for viewing products.
     """
 
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by("product_group__name")
     serializer_class = ProductSerializer
-
-    def list(self, request):
-        """
-        Lists products sorted by product group
-        """
-        queryset = self.get_queryset().order_by("product_group__name")
-        serializer = ProductSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-
-        if self.action == GET_LIST:
-            permission_classes = [AllowAny]
-        elif self.action == GET_RETRIEVE:
-            permission_classes = [AllowAny]
-        elif self.action == POST_CREATE:
-            permission_classes = [AllowAny]
-        elif self.action == PUT_UPDATE:
-            permission_classes = [AllowAny]
-        elif self.action == PATCH_PARTIAL_UPDATE:
-            permission_classes = [AllowAny]
-        elif self.action == DELETE_DESTROY:
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-
-        return [permission() for permission in permission_classes]
+    permission_classes = [IsAuthenticated]

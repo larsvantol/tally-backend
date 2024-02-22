@@ -4,6 +4,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
 
+
 # Create your models here.
 class ProductGroup(models.Model):
     name = models.CharField(max_length=100)
@@ -13,6 +14,7 @@ class ProductGroup(models.Model):
 
     def __str__(self):
         return str(self.name)
+
 
 
 class Product(models.Model):
@@ -27,14 +29,15 @@ class Product(models.Model):
         help_text="""BTW percentage of the transaction.""", default=0
     )  # TODO: make default percentage code a setting
     image_url = models.CharField(max_length=2083, blank=True)
-    product_group = models.ForeignKey(ProductGroup, null=True, on_delete=models.SET_NULL)
+    product_group = models.ForeignKey(
+        ProductGroup, null=True, on_delete=models.SET_NULL, related_name="products"
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name}"
-
 
 class ProductSettings(dbsettings.Group):
     default_VAT_value = dbsettings.PositiveIntegerValue()
