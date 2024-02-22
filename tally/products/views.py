@@ -19,22 +19,6 @@ class ProductGroupViewSet(ReadOnlyModelViewSet):
     serializer_class = ProductGroupSerializer
     permission_classes = [IsAuthenticated]
 
-    def list(self, request, format=None):
-        print(f"Cookie:\t{request.COOKIES}")
-        print(f"Headers:\t{json.dumps(dict(request.headers), indent=2)}")
-        print(f"Session:\t{request.session}")
-        print(f"User:\t{request.user}")
-        print(f"Auth:\t{request.auth}")
-
-        sessions = Session.objects.iterator()  # also works with Session.objects.get_queryset()
-        for session in sessions:  # iterate over sessions
-            data = session.get_decoded()  # decode the session data
-            data["session_key"] = (
-                session.session_key
-            )  # normally the data doesn't include the session key, so add it
-            print(f"Session:\t{json.dumps(data, indent=2)}")
-        return super().list(request, format)
-
 
 class ProductViewSet(ReadOnlyModelViewSet):
     """
